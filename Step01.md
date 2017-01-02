@@ -1,3 +1,23 @@
+##What You Will Learn during this Step:
+- Set up an Maven Project with Eclipse. Intellij Link : https://www.jetbrains.com/help/idea/2016.2/getting-started-with-maven.html#create_maven_project
+- Include dependencies needed for Spring Boot.
+- Launch Your First Spring Boot Application.
+
+##What You Will NOT Learn during this Step:
+- Spring Boot does a lot of magic. This magic is called Auto Configuration.
+- We will discuss about different terms related to Spring Boot - Starter Parent, Starter projects, Auto configuration - in depth during our first 10 steps.
+- As far as this step is concerned, we will focus on getting up and running with Spring Boot. We will understand all the magic a little later. 
+- We will copy a lot of code in this step - just to avoid typos
+
+## Useful Snippets and References
+First Snippet
+```
+```
+Second Snippet
+```
+```
+
+## Exercises
 
 ## Files List
 ### /pom.xml
@@ -18,22 +38,9 @@
     </parent>
 
     <dependencies>
-        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -63,7 +70,6 @@ import org.springframework.context.ApplicationContext;
 public class Application {
 
     public static void main(String[] args) {
-
         ApplicationContext ctx = SpringApplication.run(Application.class, args);
 
     }
