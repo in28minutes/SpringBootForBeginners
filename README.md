@@ -16,6 +16,29 @@ Spring Boot Tutorial For Beginners
 - Video : https://www.youtube.com/watch?v=DLPjCZ5n_SM
 
 ##Course Overview
+
+###Introduction
+Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications that you can “just run”. We take an opinionated view of the Spring platform and third-party libraries so you can get started with minimum fuss. Most Spring Boot applications need very little Spring configuration.
+
+With Microservices, focus is shifting to getting started with developing web applications quickly. Spring Boot enables this.
+Typical stuff done at the start of projects
+- Framework setup
+ - Identifying compatible framework versions. for example, Which version of Spring and Hibernate to use?
+ - Configuring (Integrating) frameworks
+  - Configuring web.xml, Configuring Dispatcher Servlet
+  - Configuring data source, session factory
+- Logging, Transaction Management, Error Handling  
+- Configuration Management
+- Configuring Servers to deploy applications to
+- Monitoring Applications
+
+###Goals
+- Extracted from https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#getting-started-introducing-spring-boot
+- Provide quick start for projects with Spring.
+- Be opinionated but provide options.
+- Provide a range of non-functional features that are common to large classes of projects (e.g. embedded servers, security, metrics, health checks, externalized configuration).
+- Absolutely no code generation and no requirement for XML configuration.
+
 ###Step List
 - Step 01 : Todo...
 
