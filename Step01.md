@@ -9,15 +9,8 @@
 - As far as this step is concerned, we will focus on getting up and running with Spring Boot. We will understand all the magic a little later. 
 - We will copy a lot of code in this step - just to avoid typos
 
-## Useful Snippets and References
-First Snippet
-```
-```
-Second Snippet
-```
-```
-
 ## Exercises
+- If you are comfortable with Spring, try to create a few dependencies and see if are automatically auto-wired!
 
 ## Files List
 ### /pom.xml
