@@ -1,45 +1,39 @@
 ##What You Will Learn during this Step:
-- Lets add dependencies and see if they are autowired in
-- Lets make Spring Boot log the content from Spring Framework in Debug mode
+- Lets add a RestController with a dependency and see Spring Boot Magic live
+
+##Quick Spring Primer
+- What is dependency?
+- @Component
+- @Autowired
 
 ## Useful Snippets and References
 
 First Snippet
 
 ```
-    @Component
+    @RestController
     class SomeBean {
 
         @Autowired
         private SomeDependency someDependency;
 
-        public String calculateSomething() {
-            // I'm a lazy bugger. Skipping calculation
+        @RequestMapping("/")
+        public String index() {
             return someDependency.getSomething();
         }
+
     }
 
     @Component
     class SomeDependency {
 
         public String getSomething() {
-            return "something";
+            return "Hello! Welcome!";
         }
 
     }
-```
 
-Second Snippet
 ```
-System.out.println(ctx.getBean(SomeBean.class).calculateSomething());
-```
-Third Snippet
-```
-/src/main/resources/application.properties
-logging.level.org.springframework=DEBUG
-```
-
-## Exercises
 
 ## Files List
 ### /pom.xml
@@ -89,40 +83,38 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 public class Application {
 
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(Application.class, args);
-        System.out.println(ctx.getBean(SomeBean.class).calculateSomething());
 
     }
 
-    @Component
+    @RestController
     class SomeBean {
 
         @Autowired
         private SomeDependency someDependency;
 
-        public String calculateSomething() {
-            // I'm a lazy bugger. Skipping calculation
+        @RequestMapping("/")
+        public String index() {
             return someDependency.getSomething();
         }
+
     }
 
     @Component
     class SomeDependency {
 
         public String getSomething() {
-            return "something";
+            return "Hello! Welcome!";
         }
 
     }
 
 }
-```
-### /src/main/resources/application.properties
-```
-logging.level.org.springframework=DEBUG
 ```
