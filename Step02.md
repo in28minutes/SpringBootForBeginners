@@ -1,10 +1,11 @@
 ##What You Will Learn during this Step:
 - Lets add a RestController with a dependency and see Spring Boot Magic live
 
-##Quick Spring Primer
+##Quick Spring and Spring MVC Primer
 - What is dependency?
 - @Component
 - @Autowired
+- @RestController
 
 ## Useful Snippets and References
 

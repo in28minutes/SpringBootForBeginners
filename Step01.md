@@ -1,8 +1,9 @@
 ##What You Will Learn during this Step:
-- Set up an Maven Project with Eclipse. Intellij Link : https://www.jetbrains.com/help/idea/2016.2/getting-started-with-maven.html#create_maven_project
+- Set up an Maven Project with Eclipse. 
+ - Intellij Link : https://www.jetbrains.com/help/idea/2016.2/getting-started-with-maven.html#create_maven_project
 - Include dependencies needed for Spring Boot.
- - spring-boot-starter-web
- - spring-boot-maven-plugin
+ - spring-boot-starter-web : starter for building applications with Spring MVC. Tomcat is default embedded container.
+ - spring-boot-maven-plugin : Enable running application in-place and also building a jar/war to run later!
 - Launch Your First Spring Boot Application.
 
 ##Cool thing to note!
@@ -10,8 +11,7 @@ Without a lot of configuration, we are up and running with a web application
 - Refer https://github.com/in28minutes/SpringMvcStepByStep/blob/master/Step01.md and https://github.com/in28minutes/SpringMvcStepByStep/blob/master/Step11.md to understand the sort of stuff - web.xml, dispatcher servlet configuration, maven dependency management and plugins - that are need to launch a typical web application without Spring Boot!
 
 ##What You Will NOT Learn during this Step:
-- Spring Boot does a lot of magic. This magic is called Auto Configuration.
-- We will discuss about different terms related to Spring Boot - Starter Parent, Starter projects, Auto configuration - in depth during our first 10 steps.
+- Spring Boot does a lot of magic. This magic is called Auto Configuration. We will discuss about different terms related to Spring Boot - Starter Parent, Starter projects, Auto configuration - in depth during our first 10 steps.
 - As far as this step is concerned, we will focus on getting up and running with Spring Boot. We will understand all the magic a little later. 
 - We will copy a lot of code in this step - just to avoid typos
 
