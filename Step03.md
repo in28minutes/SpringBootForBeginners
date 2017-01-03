@@ -2,6 +2,7 @@
 - First installment of revealing how magic happens with Spring Boot. As a Spring Boot developer, you need to understand what's happening beneath the hood of Spring Boot! 
 - spring-boot-starter-web : starter for building applications with Spring MVC. Tomcat is default embedded container.
 - We already added this starter in the first step! Now we will explore the features it provides
+- We will enable logging in DEBUG mode to understand further
 
 ##spring-boot-starter-web
 - Spring Boot Starter Web brings all dependencies needed to build normal and RESTful web applications. Look at the dependency tree. 
@@ -12,3 +13,98 @@
  - Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
  - Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
  - Look at package org.springframework.boot.autoconfigure.web in spring-boot-autoconfigure-*.jar
+- Go to url http://localhost:8080/some-non-existing-url
+
+##Useful Snippets
+/src/main/resources/application.properties
+```
+logging.level.org.springframework: DEBUG
+```
+
+##Files List
+### /pom.xml
+```
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.in28minutes</groupId>
+    <artifactId>springboot-for-beginners-example</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Your First Spring Boot Example</name>
+    <packaging>war</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.4.0.RELEASE</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+### /src/main/java/com/in28minutes/springboot/Application.java
+```
+package com.in28minutes.springboot;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        ApplicationContext ctx = SpringApplication.run(Application.class, args);
+
+    }
+
+    @RestController
+    class SomeBean {
+
+        @Autowired
+        private SomeDependency someDependency;
+
+        @RequestMapping("/")
+        public String index() {
+            return someDependency.getSomething();
+        }
+
+    }
+
+    @Component
+    class SomeDependency {
+
+        public String getSomething() {
+            return "Hello! Welcome!";
+        }
+
+    }
+
+}
+```
+### /src/main/resources/application.properties
+```
+logging.level.org.springframework: DEBUG
+```

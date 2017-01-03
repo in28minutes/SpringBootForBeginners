@@ -21,6 +21,7 @@ Spring Boot Tutorial For Beginners
 Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications that you can “just run”. We take an opinionated view of the Spring platform and third-party libraries so you can get started with minimum fuss. Most Spring Boot applications need very little Spring configuration.
 
 With Microservices, focus is shifting to getting started with developing web applications quickly. Spring Boot enables this.
+
 Typical stuff done at the start of projects
 - Framework setup
  - Identifying compatible framework versions. for example, Which version of Spring and Hibernate to use?
@@ -33,7 +34,6 @@ Typical stuff done at the start of projects
 - Monitoring Applications
 
 ###Goals
-- Extracted from https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#getting-started-introducing-spring-boot
 - Provide quick start for projects with Spring.
 - Be opinionated but provide options.
 - Provide a range of non-functional features that are common to large classes of projects (e.g. embedded servers, security, metrics, health checks, externalized configuration).
@@ -45,6 +45,7 @@ Typical stuff done at the start of projects
 ###Expectations
 - You should know Java. You should understand usage of Annotations.
 - You should understand the basics of Spring framework.
+- A basic understanding of JPA, Spring Security will be useful.
 - You are NOT expected to have any experience with Eclipse or Maven.
 - We will help you install Eclipse and get up and running with Maven.
 
