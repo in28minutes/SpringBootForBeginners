@@ -2,7 +2,12 @@
 - Adding the second method to rest service to retrieve a specific question
 - This will be a very short step
 - http://localhost:8080/surveys/Survey1/questions/Question1
-
+- Different Request Methods
+  - GET - Retrieve details of a resource
+  - POST - Create a new resource
+  - PUT	- Update an existing resource
+  - PATCH - Update part of a resource
+  - DELETE - Delete a resource
 ## Useful Snippets and References
 First Snippet
 ```

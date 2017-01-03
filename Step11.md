@@ -1,25 +1,71 @@
 ##What You Will Learn during this Step:
-- I hate the fact that I've to stop and start the server each time. Can somebody save me?
- - Yeah. Spring Boot Developer Tools
-  - By default, any entry on the classpath that points to a folder  will be monitored for changes.
-  - These will not trigger restart - /META-INF/maven, /META-INF/resources ,/resources ,/static ,/public or /templates 
-  - Folders can be configured : spring.devtools.restart.exclude=static/**,public/** 
-  - Additional Paths : spring.devtools.restart.additional-paths
-  - LiveReload livereload.com 
-   - Technology in progress!! So, expect a few problems!
+- Understand Content Negotiation
+ - Accept:application/xml
+- http://localhost:8080/surveys/Survey1/questions/
 
 ## Useful Snippets and References
 First Snippet
 ```
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
         </dependency>
+
+```
+Second Snippet
+```
+<List>
+    <item>
+        <id>Question1</id>
+        <description>Largest Country in the World</description>
+        <correctAnswer>Russia</correctAnswer>
+        <options>
+            <options>India</options>
+            <options>Russia</options>
+            <options>United States</options>
+            <options>China</options>
+        </options>
+    </item>
+    <item>
+        <id>Question2</id>
+        <description>Most Populus Country in the World</description>
+        <correctAnswer>China</correctAnswer>
+        <options>
+            <options>India</options>
+            <options>Russia</options>
+            <options>United States</options>
+            <options>China</options>
+        </options>
+    </item>
+    <item>
+        <id>Question3</id>
+        <description>Highest GDP in the World</description>
+        <correctAnswer>United States</correctAnswer>
+        <options>
+            <options>India</options>
+            <options>Russia</options>
+            <options>United States</options>
+            <options>China</options>
+        </options>
+    </item>
+    <item>
+        <id>Question4</id>
+        <description>Second largest english speaking country</description>
+        <correctAnswer>India</correctAnswer>
+        <options>
+            <options>India</options>
+            <options>Russia</options>
+            <options>United States</options>
+            <options>China</options>
+        </options>
+    </item>
+</List>
 ```
 
+
+
 ## Exercises
-- Make changes and see if they reflect immediately
+- Execute other services using xml and see what happens!
 
 ## Files List
 ### /pom.xml
@@ -44,13 +90,18 @@ First Snippet
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+        </dependency>
         
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
-        
+
     </dependencies>
 
 
@@ -116,12 +167,17 @@ public class Application {
 ```
 package com.in28minutes.springboot.controller;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.in28minutes.springboot.model.Question;
 import com.in28minutes.springboot.service.SurveyService;
@@ -140,6 +196,23 @@ class SurveyController {
     public Question retrieveQuestion(@PathVariable String surveyId,
             @PathVariable String questionId) {
         return surveyService.retrieveQuestion(surveyId, questionId);
+    }
+
+    @PostMapping("/surveys/{surveyId}/questions")
+    ResponseEntity<?> add(@PathVariable String surveyId,
+            @RequestBody Question question) {
+
+        Question createdTodo = surveyService.addQuestion(surveyId, question);
+
+        if (createdTodo == null) {
+            return ResponseEntity.noContent().build();
+        }
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(createdTodo.getId()).toUri();
+
+        return ResponseEntity.created(location).build();
+
     }
 
 }

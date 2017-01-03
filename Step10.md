@@ -1,25 +1,39 @@
 ##What You Will Learn during this Step:
-- I hate the fact that I've to stop and start the server each time. Can somebody save me?
- - Yeah. Spring Boot Developer Tools
-  - By default, any entry on the classpath that points to a folder  will be monitored for changes.
-  - These will not trigger restart - /META-INF/maven, /META-INF/resources ,/resources ,/static ,/public or /templates 
-  - Folders can be configured : spring.devtools.restart.exclude=static/**,public/** 
-  - Additional Paths : spring.devtools.restart.additional-paths
-  - LiveReload livereload.com 
-   - Technology in progress!! So, expect a few problems!
-
+- Create a REST Service to add a new question to survey
+ - @PostMapping("/surveys/{surveyId}/questions")
+ - @RequestBody Question question
+ - What should be Response Status for create?
+ - ResponseEntity.created(location).build()
+ - ResponseEntity.noContent().build()
+ - Using Postman : https://www.getpostman.com
+ 
 ## Useful Snippets and References
 First Snippet
 ```
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
+    @PostMapping("/surveys/{surveyId}/questions")
+    ResponseEntity<?> add(@PathVariable String surveyId,
+            @RequestBody Question question) {
+
+        Question createdTodo = surveyService.addQuestion(surveyId, question);
+
+        if (createdTodo == null) {
+            return ResponseEntity.noContent().build();
+        }
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(createdTodo.getId()).toUri();
+
+        return ResponseEntity.created(location).build();
+
+    }
+```
+Second Snippet
+```
+{"description":"Second Most Populous Country in the World","correctAnswer":"India","options":["India","Russia","United States","China"]}
 ```
 
 ## Exercises
-- Make changes and see if they reflect immediately
+- Create more REST services of your choice
 
 ## Files List
 ### /pom.xml
@@ -116,12 +130,17 @@ public class Application {
 ```
 package com.in28minutes.springboot.controller;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.in28minutes.springboot.model.Question;
 import com.in28minutes.springboot.service.SurveyService;
@@ -140,6 +159,23 @@ class SurveyController {
     public Question retrieveQuestion(@PathVariable String surveyId,
             @PathVariable String questionId) {
         return surveyService.retrieveQuestion(surveyId, questionId);
+    }
+
+    @PostMapping("/surveys/{surveyId}/questions")
+    ResponseEntity<?> add(@PathVariable String surveyId,
+            @RequestBody Question question) {
+
+        Question createdTodo = surveyService.addQuestion(surveyId, question);
+
+        if (createdTodo == null) {
+            return ResponseEntity.noContent().build();
+        }
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(createdTodo.getId()).toUri();
+
+        return ResponseEntity.created(location).build();
+
     }
 
 }
