@@ -1,9 +1,29 @@
 ##What You Will Learn during this Step:
-- We want to prepare for creating a Rest Service 
- - Survey
- - Question
- - SurveyService
-- We use hard-coded data to get started
+- Create a Rest Service
+ - Autowire SurveyService
+ - Create @GetMapping("/surveys/{surveyId}/questions")
+ - Use @PathVariable String surveyId
+- http://localhost:8080/surveys/Survey1/questions/
+ - How does the Bean get converted to a JSON?
+  - Auto Configuration : If Jackson jar is on the class path, message converters are auto created! (Search in log :Creating shared instance of singleton bean 'mappingJackson2HttpMessageConverter')
+  
+## Useful Snippets and References
+First Snippet
+```
+@RestController
+class SurveyController {
+    @Autowired
+    private SurveyService surveyService;
+
+    @GetMapping("/surveys/{surveyId}/questions")
+    public List<Question> retrieveQuestions(@PathVariable String surveyId) {
+        return surveyService.retrieveQuestions(surveyId);
+    }
+}
+```
+
+##Exercise
+- Try to think about how the URI for retrieving the details of a specific question should be!
 
 ## Files List
 ### /pom.xml
@@ -86,6 +106,38 @@ public class Application {
 
     }
 
+}
+```
+### /src/main/java/com/in28minutes/springboot/controller/SurveyController.java
+```
+package com.in28minutes.springboot.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.in28minutes.springboot.model.Question;
+import com.in28minutes.springboot.service.SurveyService;
+
+@RestController
+class SurveyController {
+    @Autowired
+    private SurveyService surveyService;
+
+    @GetMapping("/surveys/{surveyId}/questions")
+    public List<Question> retrieveQuestions(@PathVariable String surveyId) {
+        List<Question> retrieveQuestions = surveyService
+                .retrieveQuestions(surveyId);
+
+        if (retrieveQuestions == null) {
+            throw new RuntimeException("Survey not found");
+        }
+
+        return retrieveQuestions;
+    }
 }
 ```
 ### /src/main/java/com/in28minutes/springboot/model/Question.java

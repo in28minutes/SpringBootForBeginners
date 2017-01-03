@@ -1,9 +1,21 @@
 ##What You Will Learn during this Step:
-- We want to prepare for creating a Rest Service 
- - Survey
- - Question
- - SurveyService
-- We use hard-coded data to get started
+- Adding the second method to rest service to retrieve a specific question
+- This will be a very short step
+- http://localhost:8080/surveys/Survey1/questions/Question1
+
+## Useful Snippets and References
+First Snippet
+```
+    @GetMapping(path = "/surveys/{surveyId}/questions/{questionId}")
+    public Question retrieveQuestion(@PathVariable String surveyId,
+            @PathVariable String questionId) {
+        return surveyService.retrieveQuestion(surveyId, questionId);
+    }
+
+```
+
+## Exercises
+- Write the method to retrieve all surveys! 
 
 ## Files List
 ### /pom.xml
@@ -84,6 +96,38 @@ public class Application {
             return "Hello! Welcome!";
         }
 
+    }
+
+}
+```
+### /src/main/java/com/in28minutes/springboot/controller/SurveyController.java
+```
+package com.in28minutes.springboot.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.in28minutes.springboot.model.Question;
+import com.in28minutes.springboot.service.SurveyService;
+
+@RestController
+class SurveyController {
+    @Autowired
+    private SurveyService surveyService;
+
+    @GetMapping("/surveys/{surveyId}/questions")
+    public List<Question> retrieveQuestions(@PathVariable String surveyId) {
+        return surveyService.retrieveQuestions(surveyId);
+    }
+
+    @GetMapping(path = "/surveys/{surveyId}/questions/{questionId}")
+    public Question retrieveQuestion(@PathVariable String surveyId,
+            @PathVariable String questionId) {
+        return surveyService.retrieveQuestion(surveyId, questionId);
     }
 
 }

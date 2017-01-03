@@ -31,7 +31,7 @@ logging.level.org.springframework: DEBUG
     <artifactId>springboot-for-beginners-example</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Your First Spring Boot Example</name>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
