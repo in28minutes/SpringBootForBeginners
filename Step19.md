@@ -1,100 +1,49 @@
 ##What You Will Learn during this Step:
-- Even better configuration management than @Value
-- Type-safe Configuration Properties
-- http://localhost:8080/dynamic-configuration
-- Also look at http://localhost:8080/actuator/#http://localhost:8080/configprops
+- Look at H2 Console : http://localhost:8080/h2-console
+ - Use db url jdbc:h2:mem:testdb
+- Add findByRole method 
+
+##Some Notes
+- Useful Properties
+ - spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+ - spring.datasource.url=jdbc:mysql://localhost:3306/test 
+ - spring.datasource.username=root
+ - spring.datasource.password=admin
+ - spring.datasource.initialize=true 
+ - spring.jpa.hibernate.ddl-auto=update
+ - spring.jpa.show-sql=true
 
 ## Useful Snippets and References
+
 First Snippet
 ```
-package com.in28minutes.springboot.configuration;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+        log.info("-------------------------------");
+        log.info("Finding user with id 1");
+        log.info("-------------------------------");
+        User user = repository.findOne(1L);
+        log.info(user.toString());
 
-@Component
-@ConfigurationProperties("basic")
-public class BasicConfiguration {
-    private boolean value;
-    private String message;
-    private int number;
-
-    public boolean isValue() {
-        return value;
-    }
-
-    public void setValue(boolean value) {
-        this.value = value;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-}
+        log.info("-------------------------------");
+        log.info("Finding all Admins");
+        log.info("-------------------------------");
+        for (User admin : repository.findByRole("Admin")) {
+            log.info(admin.toString());
+            // Do something...
+        }
 
 ```
 Second Snippet
 ```
-        @Autowired
-        private BasicConfiguration configuration;
+package com.in28minutes.springboot.jpa;
 
-        @RequestMapping("/dynamic-configuration")
-        public Map dynamicConfiguration() {
-            // Not the best practice to use a map to store differnt types!
-            Map map = new HashMap();
-            map.put("message", configuration.getMessage());
-            map.put("number", configuration.getNumber());
-            map.put("key", configuration.isValue());
-            return map;
-        }
+import java.util.List;
 
-```
-Third Snippet
-```
-basic.value: true
-basic.message: Dynamic Message
-basic.number: 100
-```
-Fourth Snippet
-```
-basic: 
-   value: true
-   message: Dynamic Message YAML
-   number: 100
-```
+import org.springframework.data.repository.CrudRepository;
 
-## Exercises
-- Understand Type Safety
-```
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Binding to target com.in28minutes.springboot.configuration.BasicConfiguration@391b8545 failed:
-
-    Property: basic.number
-    Value: ABC
-    Reason: Failed to convert property value of type [java.lang.String] to required type [int] for property 'number'; nested exception is org.springframework.core.convert.ConverterNotFoundException: No converter found capable of converting from type [java.lang.String] to type [int]
-
-
-Action:
-
-Update your application's configuration
+public interface UserRepository extends CrudRepository<User, Long> {
+    List<User> findByRole(String description);
+}
 ```
 
 ## Files List
@@ -120,17 +69,22 @@ Update your application's configuration
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-        
+
+        <!-- spring.datasource.driver-class-name=com.mysql.jdbc.Driver spring.datasource.url=jdbc:mysql://localhost:3306/test 
+            spring.datasource.username=root spring.datasource.password=admin spring.datasource.initialize=true 
+            spring.jpa.hibernate.ddl-auto=update spring.jpa.show-sql=true -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jetty</artifactId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- http://localhost:8080/h2-console -->
+        <!-- Security Config - .headers().frameOptions().disable() -->
+        <!-- jdbc:h2:mem:testdb -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
         </dependency>
 
         <dependency>
@@ -330,6 +284,116 @@ class SurveyController {
 
     }
 
+}
+```
+### /src/main/java/com/in28minutes/springboot/jpa/User.java
+```
+package com.in28minutes.springboot.jpa;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private String name;// Not perfect!! Should be a proper object!
+    private String role;// Not perfect!! An enum should be a better choice!
+
+    protected User() {
+    }
+
+    public User(String name, String role) {
+        super();
+        this.name = name;
+        this.role = role;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("User [id=%s, name=%s, role=%s]", id, name, role);
+    }
+
+}
+```
+### /src/main/java/com/in28minutes/springboot/jpa/UserCommandLineRunner.java
+```
+package com.in28minutes.springboot.jpa;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+@Component
+public class UserCommandLineRunner implements CommandLineRunner {
+
+    private static final Logger log = LoggerFactory
+            .getLogger(UserCommandLineRunner.class);
+
+    @Autowired
+    private UserRepository repository;
+
+    @Override
+    public void run(String... args) {
+        // save a couple of customers
+        repository.save(new User("Ranga", "Admin"));
+        repository.save(new User("Ravi", "User"));
+        repository.save(new User("Satish", "Admin"));
+        repository.save(new User("Raghu", "User"));
+
+        log.info("-------------------------------");
+        log.info("Finding all users");
+        log.info("-------------------------------");
+        for (User user : repository.findAll()) {
+            log.info(user.toString());
+        }
+
+        log.info("-------------------------------");
+        log.info("Finding user with id 1");
+        log.info("-------------------------------");
+        User user = repository.findOne(1L);
+        log.info(user.toString());
+
+        log.info("-------------------------------");
+        log.info("Finding all Admins");
+        log.info("-------------------------------");
+        for (User admin : repository.findByRole("Admin")) {
+            log.info(admin.toString());
+            // Do something...
+        }
+    }
+
+}
+```
+### /src/main/java/com/in28minutes/springboot/jpa/UserRepository.java
+```
+package com.in28minutes.springboot.jpa;
+
+import java.util.List;
+
+import org.springframework.data.repository.CrudRepository;
+
+public interface UserRepository extends CrudRepository<User, Long> {
+    List<User> findByRole(String description);
 }
 ```
 ### /src/main/java/com/in28minutes/springboot/model/Question.java
@@ -567,13 +631,13 @@ public class SurveyService {
 ```
 ### /src/main/resources/application.properties
 ```
-logging.level.org.springframework: DEBUG
+logging.level.org.springframework: INFO
 app.name: In28Minutes
 app.description: ${app.name} is your first Spring Boot application Properties
 welcome.message: Welcome to your first Spring Boot application
 basic.value: true
 basic.message: Dynamic Message
-basic.number: 100
+basic.number: 123
 ```
 ### /src/main/resources/application.yaml
 ```
