@@ -1,26 +1,32 @@
 ##What You Will Learn during this Step:
-- Spring Boot Actuator
- - /env, /metrics, /trace, /dump, /shutdown, /beans, / autoconfig, /configprops, /mappings 
-- HAL Browser
- - http://localhost:8080/actuator/
-- Execute individual REST Services for each of above
+- Using Dynamic Configuration in your application
+- Customize Welcome Message
+- Different ways of configuration
+ - --welcome.message="SomethingElse" in Program Arguments
+ - --spring.config.location=classpath:/default.properties
+ - We will learn about profiles in next step
+- Using Placeholders
+- YAML
 
-## Useful Snippets and References
+##Snippets
 First Snippet
 ```
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-rest-hal-browser</artifactId>
-        </dependency>
-
+logging:
+  level:
+      org.springframework: DEBUG
+app:
+   name: In28Minutes
+   description: ${app.name} is your first Spring Boot application
+welcome:
+    message: Welcome to your first Spring Boot app!
 ```
 
-## Files List
+Second Snippet
+```
+@Value("${welcome.message}")
+```
+
+##Files List
 ### /pom.xml
 ```
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -39,9 +45,21 @@ First Snippet
     </parent>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
 
         <dependency>
@@ -80,6 +98,7 @@ First Snippet
             </plugin>
         </plugins>
     </build>
+
 </project>
 ```
 ### /src/main/java/com/in28minutes/springboot/Application.java
@@ -87,6 +106,7 @@ First Snippet
 package com.in28minutes.springboot;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -98,8 +118,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class Application {
 
     public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(Application.class, args);
 
+        ApplicationContext ctx = SpringApplication.run(Application.class, args);
     }
 
     @RestController
@@ -118,8 +138,11 @@ public class Application {
     @Component
     class SomeDependency {
 
+        @Value("${welcome.message}")
+        private String welcomeMessage;
+
         public String getSomething() {
-            return "Hello! Welcome!";
+            return welcomeMessage;
         }
 
     }
@@ -416,4 +439,18 @@ public class SurveyService {
 ### /src/main/resources/application.properties
 ```
 logging.level.org.springframework: DEBUG
+app.name: In28Minutes
+app.description: ${app.name} is your first Spring Boot application Properties
+welcome.message: Welcome to your first Spring Boot application
+```
+### /src/main/resources/application.yaml
+```
+logging:
+  level:
+      org.springframework: DEBUG
+app:
+   name: In28Minutes
+   description: ${app.name} is your first Spring Boot application
+welcome:
+    message: Welcome to your first Spring Boot app!
 ```

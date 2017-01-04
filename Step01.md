@@ -7,8 +7,8 @@
 - Launch Your First Spring Boot Application.
 
 ##Cool thing to note!
-Without a lot of configuration, we are up and running with a web application
-- Refer https://github.com/in28minutes/SpringMvcStepByStep/blob/master/Step01.md and https://github.com/in28minutes/SpringMvcStepByStep/blob/master/Step11.md to understand the sort of stuff - web.xml, dispatcher servlet configuration, maven dependency management and plugins - that are need to launch a typical web application without Spring Boot!
+- Without a lot of configuration, we are up and running with a web application
+ - Refer https://github.com/in28minutes/SpringMvcStepByStep/blob/master/Step01.md and https://github.com/in28minutes/SpringMvcStepByStep/blob/master/Step11.md to understand the sort of stuff - web.xml, dispatcher servlet configuration, maven dependency management and plugins - that are need to launch a typical web application without Spring Boot!
 
 ##What You Will NOT Learn during this Step:
 - Spring Boot does a lot of magic. This magic is called Auto Configuration. We will discuss about different terms related to Spring Boot - Starter Parent, Starter projects, Auto configuration - in depth during our first 10 steps.

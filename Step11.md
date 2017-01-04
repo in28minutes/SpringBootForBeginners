@@ -1,6 +1,7 @@
 ##What You Will Learn during this Step:
 - Understand Content Negotiation
  - Accept:application/xml
+- Deliver XML Responses from the REST Services
 - http://localhost:8080/surveys/Survey1/questions/
 
 ## Useful Snippets and References

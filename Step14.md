@@ -1,24 +1,32 @@
 ##What You Will Learn during this Step:
-- Spring Boot Actuator
- - /env, /metrics, /trace, /dump, /shutdown, /beans, / autoconfig, /configprops, /mappings 
-- HAL Browser
- - http://localhost:8080/actuator/
-- Execute individual REST Services for each of above
+- Embedded servlet containers
+ - Default Tomcat
+ - We did not install Tomcat. Did we? Magic is done by Spring Boot!
+ - Switching to Jetty or Undertow
+- Configuration
+ - server.port
 
 ## Useful Snippets and References
 First Snippet
 ```
-        <dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+    <exclusions>
+        <exclusion>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-rest-hal-browser</artifactId>
-        </dependency>
-
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jetty</artifactId>
+</dependency>
 ```
+
+## Exercises
+- Find out from documentation (https://docs.spring.io/spring-boot/docs/current/reference/html/howto-embedded-servlet-containers.html) how to switch to undertow!
 
 ## Files List
 ### /pom.xml
@@ -39,9 +47,21 @@ First Snippet
     </parent>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
 
         <dependency>
@@ -80,6 +100,7 @@ First Snippet
             </plugin>
         </plugins>
     </build>
+
 </project>
 ```
 ### /src/main/java/com/in28minutes/springboot/Application.java

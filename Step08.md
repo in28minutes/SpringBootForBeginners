@@ -8,6 +8,7 @@
   - PUT	- Update an existing resource
   - PATCH - Update part of a resource
   - DELETE - Delete a resource
+
 ## Useful Snippets and References
 First Snippet
 ```
