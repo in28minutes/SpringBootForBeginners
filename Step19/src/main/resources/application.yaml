@@ -1,0 +1,15 @@
+logging:
+  level:
+      org.springframework: DEBUG
+
+app:
+   name: In28Minutes
+   description: ${app.name} is your first Spring Boot application
+
+welcome:
+    message: Welcome to your first Spring Boot app!
+    
+basic: 
+   value: true
+   message: Dynamic Message YAML
+   number: 100

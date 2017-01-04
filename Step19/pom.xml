@@ -20,19 +20,20 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- spring.datasource.driver-class-name=com.mysql.jdbc.Driver spring.datasource.url=jdbc:mysql://localhost:3306/test 
+            spring.datasource.username=root spring.datasource.password=admin spring.datasource.initialize=true 
+            spring.jpa.hibernate.ddl-auto=update spring.jpa.show-sql=true -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
+        <!-- http://localhost:8080/h2-console -->
+        <!-- Security Config - .headers().frameOptions().disable() -->
+        <!-- jdbc:h2:mem:testdb -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
 
         <dependency>
