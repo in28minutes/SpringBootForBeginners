@@ -2,6 +2,8 @@
 - Spring Boot vs Spring
 - What Spring Boot is Not!
 - Auto component scan
+- A programming tip
+ - Pair Program once in a while!
 
 ##Spring Boot vs Spring
 ###Spring

@@ -4,6 +4,8 @@
 - HAL Browser
  - http://localhost:8080/actuator/
 - Execute individual REST Services for each of above
+- Programming Tip
+ - Use static code analysis - https://www.youtube.com/watch?v=rB_BaftN3nE
 
 ## Useful Snippets and References
 First Snippet

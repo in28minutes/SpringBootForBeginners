@@ -5,6 +5,8 @@
  - Switching to Jetty or Undertow
 - Configuration
  - server.port
+- Programming Tip
+ - Always review code : https://www.youtube.com/watch?v=hVJGu0xdXII
 
 ## Useful Snippets and References
 First Snippet
