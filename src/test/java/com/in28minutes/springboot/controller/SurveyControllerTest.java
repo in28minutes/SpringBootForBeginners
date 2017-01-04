@@ -26,7 +26,7 @@ import com.in28minutes.springboot.model.Question;
 import com.in28minutes.springboot.service.SurveyService;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(SurveyController.class)
+@WebMvcTest(value = SurveyController.class, secure = false)
 public class SurveyControllerTest {
 
     @Autowired
@@ -59,7 +59,7 @@ public class SurveyControllerTest {
     }
 
     @Test
-    public void retrieveTodos() throws Exception {
+    public void retrieveSurveyQuestions() throws Exception {
         List<Question> mockList = Arrays.asList(
                 new Question("Question1", "First Alphabet", "A", Arrays.asList(
                         "A", "B", "C", "D")),
@@ -85,7 +85,7 @@ public class SurveyControllerTest {
     }
 
     @Test
-    public void createTodo() throws Exception {
+    public void createSurveyQuestion() throws Exception {
         Question mockQuestion = new Question("1", "Smallest Number", "1",
                 Arrays.asList("1", "2", "3", "4"));
 

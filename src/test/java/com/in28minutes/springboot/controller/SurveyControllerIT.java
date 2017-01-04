@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.in28minutes.springboot.Application;
@@ -34,7 +36,7 @@ public class SurveyControllerIT {
 
     private TestRestTemplate template = new TestRestTemplate();
 
-    HttpHeaders headers = new HttpHeaders();
+    HttpHeaders headers = createHeaders("user1", "secret1");
 
     @Before
     public void setupJSONAcceptType() {
@@ -42,7 +44,7 @@ public class SurveyControllerIT {
     }
 
     @Test
-    public void retrieveTodo() throws Exception {
+    public void retrieveSurveyQuestion() throws Exception {
 
         String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia,options:[India,Russia,United States,China]}";
 
@@ -55,7 +57,7 @@ public class SurveyControllerIT {
     }
 
     @Test
-    public void retrieveTodos() throws Exception {
+    public void retrieveSurveyQuestions() throws Exception {
         ResponseEntity<List<Question>> response = template.exchange(
                 createUrl("/surveys/Survey1/questions/"), HttpMethod.GET,
                 new HttpEntity<String>("DUMMY_DOESNT_MATTER", headers),
@@ -70,7 +72,7 @@ public class SurveyControllerIT {
     }
 
     @Test
-    public void addTodo() throws Exception {
+    public void createSurveyQuestion() throws Exception {
         Question question = new Question("DOESN'T MATTER", "Smallest Number",
                 "1", Arrays.asList("1", "2", "3", "4"));
 
@@ -86,4 +88,15 @@ public class SurveyControllerIT {
         return "http://localhost:" + port + uri;
     }
 
+    HttpHeaders createHeaders(String username, String password) {
+        return new HttpHeaders() {
+            {
+                String auth = username + ":" + password;
+                byte[] encodedAuth = Base64.encode(auth.getBytes(Charset
+                        .forName("US-ASCII")));
+                String authHeader = "Basic " + new String(encodedAuth);
+                set("Authorization", authHeader);
+            }
+        };
+    }
 }

@@ -52,7 +52,7 @@ public class SurveyControllerIT {
     }
 
     @Test
-    public void retrieveTodo() throws Exception {
+    public void retrieveSurveyQuestion() throws Exception {
 
         String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia,options:[India,Russia,United States,China]}";
 
@@ -746,7 +746,7 @@ public class SurveyControllerIT {
     }
 
     @Test
-    public void retrieveTodo() throws Exception {
+    public void retrieveSurveyQuestion() throws Exception {
 
         String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia,options:[India,Russia,United States,China]}";
 

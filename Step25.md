@@ -6,7 +6,7 @@
 First Snippet
 ```
     @Test
-    public void retrieveTodos() throws Exception {
+    public void retrieveSurveyQuestions() throws Exception {
         List<Question> mockList = Arrays.asList(
                 new Question("Question1", "First Alphabet", "A", Arrays.asList(
                         "A", "B", "C", "D")),
@@ -34,7 +34,7 @@ First Snippet
 Second Snippet
 ```
     @Test
-    public void createTodo() throws Exception {
+    public void createSurveyQuestion() throws Exception {
         Question mockQuestion = new Question("1", "Smallest Number", "1",
                 Arrays.asList("1", "2", "3", "4"));
 
@@ -739,7 +739,7 @@ public class SurveyControllerIT {
     }
 
     @Test
-    public void retrieveTodo() throws Exception {
+    public void retrieveSurveyQuestion() throws Exception {
 
         String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia,options:[India,Russia,United States,China]}";
 
@@ -752,7 +752,7 @@ public class SurveyControllerIT {
     }
 
     @Test
-    public void retrieveTodos() throws Exception {
+    public void retrieveSurveyQuestions() throws Exception {
         ResponseEntity<List<Question>> response = template.exchange(
                 createUrl("/surveys/Survey1/questions/"), HttpMethod.GET,
                 new HttpEntity<String>("DUMMY_DOESNT_MATTER", headers),
@@ -767,7 +767,7 @@ public class SurveyControllerIT {
     }
 
     @Test
-    public void addTodo() throws Exception {
+    public void createSurveyQuestion() throws Exception {
         Question question = new Question("DOESN'T MATTER", "Smallest Number",
                 "1", Arrays.asList("1", "2", "3", "4"));
 
@@ -848,7 +848,7 @@ public class SurveyControllerTest {
     }
 
     @Test
-    public void retrieveTodos() throws Exception {
+    public void retrieveSurveyQuestions() throws Exception {
         List<Question> mockList = Arrays.asList(
                 new Question("Question1", "First Alphabet", "A", Arrays.asList(
                         "A", "B", "C", "D")),
@@ -874,7 +874,7 @@ public class SurveyControllerTest {
     }
 
     @Test
-    public void createTodo() throws Exception {
+    public void createSurveyQuestion() throws Exception {
         Question mockQuestion = new Question("1", "Smallest Number", "1",
                 Arrays.asList("1", "2", "3", "4"));
 
