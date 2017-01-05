@@ -6,6 +6,17 @@
  - spring-boot-maven-plugin : Enable running application in-place and also building a jar/war to run later!
 - Launch Your First Spring Boot Application.
 
+###Typical stuff done at the start of projects
+- Framework setup
+ - Identifying compatible framework versions. for example, Which version of Spring and Hibernate to use?
+ - Configuring (Integrating) frameworks
+  - Configuring web.xml, Configuring Dispatcher Servlet
+  - Configuring data source, session factory
+- Logging, Transaction Management, Error Handling  
+- Configuration Management
+- Configuring Servers to deploy applications to
+- Monitoring Applications
+
 ##Cool thing to note!
 - Without a lot of configuration, we are up and running with a web application
  - Refer https://github.com/in28minutes/SpringMvcStepByStep/blob/master/Step01.md and https://github.com/in28minutes/SpringMvcStepByStep/blob/master/Step11.md to understand the sort of stuff - web.xml, dispatcher servlet configuration, maven dependency management and plugins - that are need to launch a typical web application without Spring Boot!

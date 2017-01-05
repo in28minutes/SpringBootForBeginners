@@ -18,20 +18,37 @@ Spring Boot Tutorial For Beginners
 ##Course Overview
 
 ###Introduction
+
+Spring Boot has a lot of magic going for it. Developing Services with it is cool and fun.
+
+Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications that you can “just run”. Most Spring Boot applications need very little Spring configuration.
+
+In this course, you will learn the cool things about Spring Boot and Spring Boot Starter Projects. We will develop a basic REST Service to manage questions of a survey.
+
+You will learn about Spring Boot step by step - in more than 25 steps. This course would be a perfect first step as an introduction to Spring Boot.
+
+You will be using Spring Boot and get introduced to REST Services, Spring Security (Authentication and Authorization), Maven (dependencies management), Eclipse (IDE) and Tomcat Embedded Web Server. We will help you set up each one of these.
+
+You will learn about
+
+- Basics of Spring Boot
+- Basics of Auto Configuration and Spring Boot Magic
+- Spring Boot Starter Projects
+- Spring Initializr
+- Basic REST Services using Spring Boot Data Web
+- REST Service Content Negotiation with JSON and XML
+- Embedded servlet containers : Tomcat, Jetty and Undertow
+- Writing Unit and Integration tests using Spring Boot Starter Test
+- Profiles and Dynamic Configuration with Spring Boot
+- Spring Boot Data JPA
+- Spring Boot Actuator
+- Spring Security
+- Spring Boot Developer Tools and LiveReload
+
 Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications that you can “just run”. We take an opinionated view of the Spring platform and third-party libraries so you can get started with minimum fuss. Most Spring Boot applications need very little Spring configuration.
 
 With Microservices, focus is shifting to getting started with developing web applications quickly. Spring Boot enables this.
 
-Typical stuff done at the start of projects
-- Framework setup
- - Identifying compatible framework versions. for example, Which version of Spring and Hibernate to use?
- - Configuring (Integrating) frameworks
-  - Configuring web.xml, Configuring Dispatcher Servlet
-  - Configuring data source, session factory
-- Logging, Transaction Management, Error Handling  
-- Configuration Management
-- Configuring Servers to deploy applications to
-- Monitoring Applications
 
 ###Goals
 - Provide quick start for projects with Spring.
@@ -40,7 +57,34 @@ Typical stuff done at the start of projects
 - Absolutely no code generation and no requirement for XML configuration.
 
 ###Step List
-- Step 01 : Todo...
+- Step 01: Setup and Launch Spring Boot Application with Maven and Eclipse
+- Step 02: Creating your first RestController
+- Step 03: Understanding Spring Boot Magic : Spring Boot Starter Web
+- Step 04: Understanding Spring Boot Magic : Spring Boot Starter Parent
+- Step 05: Spring Boot vs Spring
+- Step 06: Create all Services for Survey and Questions
+- Step 07: What is REST? Creating REST Service with @GetMapping and @PathVariable
+- Step 08: Second REST Service to retrieve a specific question
+- Step 09: Spring Boot Developer Tools and LiveReload : Develop faster!
+- Step 10: Create a REST Service to add a new question to survey : @PostMapping, Postman 
+- Step 11: Understand Content Negotiation. Deliver XML Responses from the REST Services
+- Step 12: Spring Initializr : Create Spring Boot Projects on the fly!
+- Step 13: Spring Boot Actuator : Monitor your Spring Boot applications!
+- Step 14: Understanding Embedded servlet containers : Switch to Jetty or Undertow
+- Step 15: Adding Dynamic Configuration to your application : YAML & More..
+- Step 16: Basics of Profiles
+- Step 17: Advanced Application Configuration with Type Safe Configuration Properties
+- Step 18: Spring Boot Starter : Spring Data JPA with CommandLineRunner
+- Step 19: In Memory Database H2 Console and add a new JPA Repository Method
+- Step 20: Spring Boot Starter : Introduction to Spring Data Rest
+- Step 21: Spring Boot Integration Test
+- Step 22: Adding Integration Test for POST Request
+- Step 23: Small Refactoring to organise ourselves
+- Step 24: Writing Unit Tests with Spring Boot and Mockito
+- Step 25: Writing Unit test for createTodo
+- Step 26: Securing our services with Basic Authentication using Spring Security
+- Step 27: Configure Spring Security user roles for survey and other services
+- Step 28: A Deep Dive into Spring Boot Auto Configuration
 
 ###Expectations
 - You should know Java. You should understand usage of Annotations.
