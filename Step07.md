@@ -1,15 +1,5 @@
 ##What You Will Learn during this Step:
-- What is REST?
- - Architectural style for the web. REST specifies a set of constraints.
-   - Client - Server : Server (service provider) should be different from a client (service consumer). 
-     - Enables loose coupling and independent evolution of server and client as new technologies emerge. 
-   - Each service should be stateless.
-   - Each Resource has a resource identifier.
-   - It should be possible to cache response.
-   - Consumer of the service may not have a direct connection to the Service Provider. Response might be sent from a middle layer cache.
-   - A resource can have multiple representations. Resource can modified through a message in any of the these representations.
-
-- Create a REST Service
+- Create a REST Service for Retrieving all questions for a survey
  - Autowire SurveyService
  - Create @GetMapping("/surveys/{surveyId}/questions")
  - Use @PathVariable String surveyId
@@ -17,6 +7,17 @@
  - How does the Bean get converted to a JSON?
   - Auto Configuration : If Jackson jar is on the class path, message converters are auto created! (Search in log :Creating shared instance of singleton bean 'mappingJackson2HttpMessageConverter')
 
+##Some Theory
+- What is REST?
+- Architectural style for the web. REST specifies a set of constraints.
+   - Client - Server : Server (service provider) should be different from a client (service consumer). 
+     - Enables loose coupling and independent evolution of server and client as new technologies emerge. 
+   - Each service should be stateless.
+   - Each Resource has a resource identifier.
+   - It should be possible to cache response.
+   - Consumer of the service may not have a direct connection to the Service Provider. Response might be sent from a middle layer cache.
+   - A resource can have multiple representations. Resource can modified through a message in any of the these representations.
+   
 ## Useful Snippets and References
 First Snippet
 ```
