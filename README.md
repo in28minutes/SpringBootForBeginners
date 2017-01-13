@@ -35,7 +35,7 @@ You will learn about
 - Basics of Auto Configuration and Spring Boot Magic
 - Spring Boot Starter Projects
 - Spring Initializr
-- Basic REST Services using Spring Boot Data Web
+- Basic REST Services using Spring Boot Starter Web
 - REST Service Content Negotiation with JSON and XML
 - Embedded servlet containers : Tomcat, Jetty and Undertow
 - Writing Unit and Integration tests using Spring Boot Starter Test
