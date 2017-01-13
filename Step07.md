@@ -19,6 +19,7 @@
    - A resource can have multiple representations. Resource can modified through a message in any of the these representations.
    
 ## Useful Snippets and References
+- JSON View : https://jsonview.com/
 First Snippet
 ```
 @RestController

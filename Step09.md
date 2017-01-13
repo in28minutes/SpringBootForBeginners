@@ -5,7 +5,7 @@
   - These will not trigger restart - /META-INF/maven, /META-INF/resources ,/resources ,/static ,/public or /templates 
   - Folders can be configured : spring.devtools.restart.exclude=static/**,public/** 
   - Additional Paths : spring.devtools.restart.additional-paths
-  - LiveReload livereload.com 
+  - LiveReload http://livereload.com/extensions/
    - Technology in progress!! So, expect a few problems!
 - Programming Tip 
  - Become an expert at your IDE - https://www.youtube.com/watch?v=dN9GYsG1v_c
