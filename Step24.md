@@ -5,7 +5,7 @@
 - MockMvc framework
 - @MockBean
 - Programming Tip
- - Be an expert at your build tool Maven - https://www.youtube.com/watch?v=exNl7USPfsg
+ - Be an expert at Mockito - https://www.youtube.com/watch?v=d2KwvXQgQx4
 
 ## Useful Snippets and References
 First Snippet
