@@ -1,6 +1,11 @@
 ##What You Will Learn during this Step:
 - Introduction to Spring Data Rest
  - Hit http://localhost:8080/users in POSTMAN
+ - http://localhost:8080/users/1
+ - http://localhost:8080/users/?size=4
+ - http://localhost:8080/users/?sort=name,desc
+ - @Param("role")
+ - http://localhost:8080/users/search/findByRole?role=Admin
 - Good for quick prototype! Be cautious about using this in Big applications!
 
 ## Useful Snippets and References
@@ -8,7 +13,7 @@ First Snippet
 ```
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
 
 ```
