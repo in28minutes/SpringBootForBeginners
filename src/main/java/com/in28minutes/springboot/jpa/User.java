@@ -12,8 +12,8 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private String name;// Not perfect!! Should be a proper object!
-	private String role;// Not perfect!! An enum should be a better choice!
+	private String name;
+	private String role;
 
 	protected User() {
 	}
@@ -38,7 +38,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return String.format("User [id=%s, name=%s, role=%s]", id, name, role);
+		return "User [id=" + id + ", name=" + name + ", role=" + role + "]";
 	}
 
 }

@@ -33,5 +33,4 @@ public class BasicConfiguration {
 	public void setNumber(int number) {
 		this.number = number;
 	}
-
 }

@@ -25,27 +25,32 @@ class SurveyController {
 		return surveyService.retrieveQuestions(surveyId);
 	}
 
-	@GetMapping(path = "/surveys/{surveyId}/questions/{questionId}")
-	public Question retrieveQuestion(@PathVariable String surveyId,
+	// GET "/surveys/{surveyId}/questions/{questionId}"
+	@GetMapping("/surveys/{surveyId}/questions/{questionId}")
+	public Question retrieveDetailsForQuestion(@PathVariable String surveyId,
 			@PathVariable String questionId) {
 		return surveyService.retrieveQuestion(surveyId, questionId);
 	}
 
+	// /surveys/{surveyId}/questions
 	@PostMapping("/surveys/{surveyId}/questions")
-	ResponseEntity<?> add(@PathVariable String surveyId,
-			@RequestBody Question question) {
+	public ResponseEntity<Void> addQuestionToSurvey(
+			@PathVariable String surveyId, @RequestBody Question newQuestion) {
 
-		Question createdTodo = surveyService.addQuestion(surveyId, question);
+		Question question = surveyService.addQuestion(surveyId, newQuestion);
 
-		if (createdTodo == null) {
+		if (question == null)
 			return ResponseEntity.noContent().build();
-		}
 
+		// Success - URI of the new resource in Response Header
+		// Status - created
+		// URI -> /surveys/{surveyId}/questions/{questionId}
+		// question.getQuestionId()
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path(
-				"/{id}").buildAndExpand(createdTodo.getId()).toUri();
+				"/{id}").buildAndExpand(question.getId()).toUri();
 
+		// Status
 		return ResponseEntity.created(location).build();
-
 	}
 
 }

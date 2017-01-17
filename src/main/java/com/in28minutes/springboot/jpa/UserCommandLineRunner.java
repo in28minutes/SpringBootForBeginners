@@ -16,33 +16,23 @@ public class UserCommandLineRunner implements CommandLineRunner {
 	private UserRepository repository;
 
 	@Override
-	public void run(String... args) {
-		// save a couple of customers
+	public void run(String... args) throws Exception {
+
 		repository.save(new User("Ranga", "Admin"));
 		repository.save(new User("Ravi", "User"));
 		repository.save(new User("Satish", "Admin"));
 		repository.save(new User("Raghu", "User"));
 
-		log.info("-------------------------------");
-		log.info("Finding all users");
-		log.info("-------------------------------");
 		for (User user : repository.findAll()) {
 			log.info(user.toString());
 		}
 
-		log.info("-------------------------------");
-		log.info("Finding user with id 1");
-		log.info("-------------------------------");
-		User user = repository.findOne(1L);
-		log.info(user.toString());
-
-		log.info("-------------------------------");
-		log.info("Finding all Admins");
-		log.info("-------------------------------");
-		for (User admin : repository.findByRole("Admin")) {
-			log.info(admin.toString());
-			// Do something...
+		log.info("Admin users are.....");
+		log.info("____________________");
+		for (User user : repository.findByRole("Admin")) {
+			log.info(user.toString());
 		}
+
 	}
 
 }
