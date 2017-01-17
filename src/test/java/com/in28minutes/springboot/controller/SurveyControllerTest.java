@@ -29,78 +29,72 @@ import com.in28minutes.springboot.service.SurveyService;
 @WebMvcTest(value = SurveyController.class, secure = false)
 public class SurveyControllerTest {
 
-    @Autowired
-    private MockMvc mvc;
+	@Autowired
+	private MockMvc mvc;
 
-    @MockBean
-    private SurveyService service;
+	@MockBean
+	private SurveyService service;
 
-    @Test
-    public void retrieveQuestion() throws Exception {
+	@Test
+	public void retrieveQuestion() throws Exception {
 
-        Question mockQuestion = new Question("Question1", "First Alphabet",
-                "A", Arrays.asList("A", "B", "C", "D"));
+		Question mockQuestion = new Question("Question1", "First Alphabet",
+				"A", Arrays.asList("A", "B", "C", "D"));
 
-        when(service.retrieveQuestion(anyString(), anyString())).thenReturn(
-                mockQuestion);
+		when(service.retrieveQuestion(anyString(), anyString())).thenReturn(
+				mockQuestion);
 
-        MvcResult result = mvc
-                .perform(
-                        MockMvcRequestBuilders.get(
-                                "/surveys/Survey1/questions/1").accept(
-                                        MediaType.APPLICATION_JSON))
-                                        .andExpect(status().isOk()).andReturn();
+		MvcResult result = mvc.perform(
+				MockMvcRequestBuilders.get("/surveys/Survey1/questions/1")
+						.accept(MediaType.APPLICATION_JSON)).andExpect(
+				status().isOk()).andReturn();
 
-        String expected = "{id:Question1,description:First Alphabet,correctAnswer:A,options:[A,B,C,D]}";
+		String expected = "{id:Question1,description:First Alphabet,correctAnswer:A,options:[A,B,C,D]}";
 
-        JSONAssert.assertEquals(expected, result.getResponse()
-                .getContentAsString(), false);
+		JSONAssert.assertEquals(expected, result.getResponse()
+				.getContentAsString(), false);
 
-    }
+	}
 
-    @Test
-    public void retrieveSurveyQuestions() throws Exception {
-        List<Question> mockList = Arrays.asList(
-                new Question("Question1", "First Alphabet", "A", Arrays.asList(
-                        "A", "B", "C", "D")),
-                new Question("Question2", "Last Alphabet", "Z", Arrays.asList(
-                        "A", "X", "Y", "Z")));
+	@Test
+	public void retrieveSurveyQuestions() throws Exception {
+		List<Question> mockList = Arrays.asList(new Question("Question1",
+				"First Alphabet", "A", Arrays.asList("A", "B", "C", "D")),
+				new Question("Question2", "Last Alphabet", "Z", Arrays.asList(
+						"A", "X", "Y", "Z")));
 
-        when(service.retrieveQuestions(anyString())).thenReturn(mockList);
+		when(service.retrieveQuestions(anyString())).thenReturn(mockList);
 
-        MvcResult result = mvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .get("/surveys/Survey1/questions").accept(
-                                        MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andReturn();
+		MvcResult result = mvc.perform(
+				MockMvcRequestBuilders.get("/surveys/Survey1/questions")
+						.accept(MediaType.APPLICATION_JSON)).andExpect(
+				status().isOk()).andReturn();
 
-        String expected = "["
-                + "{id:Question1,description:First Alphabet,correctAnswer:A,options:[A,B,C,D]},"
-                + "{id:Question2,description:Last Alphabet,correctAnswer:Z,options:[A,X,Y,Z]}"
-                + "]";
+		String expected = "["
+				+ "{id:Question1,description:First Alphabet,correctAnswer:A,options:[A,B,C,D]},"
+				+ "{id:Question2,description:Last Alphabet,correctAnswer:Z,options:[A,X,Y,Z]}"
+				+ "]";
 
-        JSONAssert.assertEquals(expected, result.getResponse()
-                .getContentAsString(), false);
-    }
+		JSONAssert.assertEquals(expected, result.getResponse()
+				.getContentAsString(), false);
+	}
 
-    @Test
-    public void createSurveyQuestion() throws Exception {
-        Question mockQuestion = new Question("1", "Smallest Number", "1",
-                Arrays.asList("1", "2", "3", "4"));
+	@Test
+	public void createSurveyQuestion() throws Exception {
+		Question mockQuestion = new Question("1", "Smallest Number", "1",
+				Arrays.asList("1", "2", "3", "4"));
 
-        String question = "{\"description\":\"Smallest Number\",\"correctAnswer\":\"1\",\"options\":[\"1\",\"2\",\"3\",\"4\"]}";
+		String question = "{\"description\":\"Smallest Number\",\"correctAnswer\":\"1\",\"options\":[\"1\",\"2\",\"3\",\"4\"]}";
 
-        when(service.addQuestion(anyString(), any(Question.class))).thenReturn(
-                mockQuestion);
+		when(service.addQuestion(anyString(), any(Question.class))).thenReturn(
+				mockQuestion);
 
-        mvc.perform(
-                MockMvcRequestBuilders.post("/surveys/Survey1/questions")
-                        .content(question)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(
-                        header().string("location",
-                                containsString("/surveys/Survey1/questions/1")));
-    }
+		mvc.perform(
+				MockMvcRequestBuilders.post("/surveys/Survey1/questions")
+						.content(question).contentType(
+								MediaType.APPLICATION_JSON)).andExpect(
+				status().isCreated()).andExpect(
+				header().string("location",
+						containsString("/surveys/Survey1/questions/1")));
+	}
 }

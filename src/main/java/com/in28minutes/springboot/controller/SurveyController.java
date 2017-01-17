@@ -17,35 +17,35 @@ import com.in28minutes.springboot.service.SurveyService;
 
 @RestController
 class SurveyController {
-    @Autowired
-    private SurveyService surveyService;
+	@Autowired
+	private SurveyService surveyService;
 
-    @GetMapping("/surveys/{surveyId}/questions")
-    public List<Question> retrieveQuestions(@PathVariable String surveyId) {
-        return surveyService.retrieveQuestions(surveyId);
-    }
+	@GetMapping("/surveys/{surveyId}/questions")
+	public List<Question> retrieveQuestions(@PathVariable String surveyId) {
+		return surveyService.retrieveQuestions(surveyId);
+	}
 
-    @GetMapping(path = "/surveys/{surveyId}/questions/{questionId}")
-    public Question retrieveQuestion(@PathVariable String surveyId,
-            @PathVariable String questionId) {
-        return surveyService.retrieveQuestion(surveyId, questionId);
-    }
+	@GetMapping(path = "/surveys/{surveyId}/questions/{questionId}")
+	public Question retrieveQuestion(@PathVariable String surveyId,
+			@PathVariable String questionId) {
+		return surveyService.retrieveQuestion(surveyId, questionId);
+	}
 
-    @PostMapping("/surveys/{surveyId}/questions")
-    ResponseEntity<?> add(@PathVariable String surveyId,
-            @RequestBody Question question) {
+	@PostMapping("/surveys/{surveyId}/questions")
+	ResponseEntity<?> add(@PathVariable String surveyId,
+			@RequestBody Question question) {
 
-        Question createdTodo = surveyService.addQuestion(surveyId, question);
+		Question createdTodo = surveyService.addQuestion(surveyId, question);
 
-        if (createdTodo == null) {
-            return ResponseEntity.noContent().build();
-        }
+		if (createdTodo == null) {
+			return ResponseEntity.noContent().build();
+		}
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(createdTodo.getId()).toUri();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path(
+				"/{id}").buildAndExpand(createdTodo.getId()).toUri();
 
-        return ResponseEntity.created(location).build();
+		return ResponseEntity.created(location).build();
 
-    }
+	}
 
 }

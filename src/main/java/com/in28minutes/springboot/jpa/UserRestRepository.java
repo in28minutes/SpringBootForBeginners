@@ -8,6 +8,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(collectionResourceRel = "users", path = "users")
 public interface UserRestRepository extends
-PagingAndSortingRepository<User, Long> {
-    List<User> findByRole(@Param("role") String role);
+		PagingAndSortingRepository<User, Long> {
+	List<User> findByRole(@Param("role") String role);
 }

@@ -28,75 +28,76 @@ import com.in28minutes.springboot.Application;
 import com.in28minutes.springboot.model.Question;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = Application.class,
+		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SurveyControllerIT {
 
-    @LocalServerPort
-    private int port;
+	@LocalServerPort
+	private int port;
 
-    private TestRestTemplate template = new TestRestTemplate();
+	private TestRestTemplate template = new TestRestTemplate();
 
-    HttpHeaders headers = createHeaders("user1", "secret1");
+	HttpHeaders headers = createHeaders("user1", "secret1");
 
-    @Before
-    public void setupJSONAcceptType() {
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-    }
+	@Before
+	public void setupJSONAcceptType() {
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+	}
 
-    @Test
-    public void retrieveSurveyQuestion() throws Exception {
+	@Test
+	public void retrieveSurveyQuestion() throws Exception {
 
-        String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia,options:[India,Russia,United States,China]}";
+		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia,options:[India,Russia,United States,China]}";
 
-        ResponseEntity<String> response = template.exchange(
-                createUrl("/surveys/Survey1/questions/Question1"),
-                HttpMethod.GET, new HttpEntity<String>("DUMMY_DOESNT_MATTER",
-                        headers), String.class);
+		ResponseEntity<String> response = template.exchange(
+				createUrl("/surveys/Survey1/questions/Question1"),
+				HttpMethod.GET, new HttpEntity<String>("DUMMY_DOESNT_MATTER",
+						headers), String.class);
 
-        JSONAssert.assertEquals(expected, response.getBody(), false);
-    }
+		JSONAssert.assertEquals(expected, response.getBody(), false);
+	}
 
-    @Test
-    public void retrieveSurveyQuestions() throws Exception {
-        ResponseEntity<List<Question>> response = template.exchange(
-                createUrl("/surveys/Survey1/questions/"), HttpMethod.GET,
-                new HttpEntity<String>("DUMMY_DOESNT_MATTER", headers),
-                new ParameterizedTypeReference<List<Question>>() {
-                });
+	@Test
+	public void retrieveSurveyQuestions() throws Exception {
+		ResponseEntity<List<Question>> response = template.exchange(
+				createUrl("/surveys/Survey1/questions/"), HttpMethod.GET,
+				new HttpEntity<String>("DUMMY_DOESNT_MATTER", headers),
+				new ParameterizedTypeReference<List<Question>>() {
+				});
 
-        Question sampleQuestion = new Question("Question1",
-                "Largest Country in the World", "Russia", Arrays.asList(
-                        "India", "Russia", "United States", "China"));
+		Question sampleQuestion = new Question("Question1",
+				"Largest Country in the World", "Russia", Arrays.asList(
+						"India", "Russia", "United States", "China"));
 
-        assertTrue(response.getBody().contains(sampleQuestion));
-    }
+		assertTrue(response.getBody().contains(sampleQuestion));
+	}
 
-    @Test
-    public void createSurveyQuestion() throws Exception {
-        Question question = new Question("DOESN'T MATTER", "Smallest Number",
-                "1", Arrays.asList("1", "2", "3", "4"));
+	@Test
+	public void createSurveyQuestion() throws Exception {
+		Question question = new Question("DOESN'T MATTER", "Smallest Number",
+				"1", Arrays.asList("1", "2", "3", "4"));
 
-        ResponseEntity<String> response = template.exchange(
-                createUrl("/surveys/Survey1/questions/"), HttpMethod.POST,
-                new HttpEntity<Question>(question, headers), String.class);
+		ResponseEntity<String> response = template.exchange(
+				createUrl("/surveys/Survey1/questions/"), HttpMethod.POST,
+				new HttpEntity<Question>(question, headers), String.class);
 
-        assertThat(response.getHeaders().get(HttpHeaders.LOCATION).get(0),
-                containsString("/surveys/Survey1/questions/"));
-    }
+		assertThat(response.getHeaders().get(HttpHeaders.LOCATION).get(0),
+				containsString("/surveys/Survey1/questions/"));
+	}
 
-    private String createUrl(String uri) {
-        return "http://localhost:" + port + uri;
-    }
+	private String createUrl(String uri) {
+		return "http://localhost:" + port + uri;
+	}
 
-    HttpHeaders createHeaders(String username, String password) {
-        return new HttpHeaders() {
-            {
-                String auth = username + ":" + password;
-                byte[] encodedAuth = Base64.encode(auth.getBytes(Charset
-                        .forName("US-ASCII")));
-                String authHeader = "Basic " + new String(encodedAuth);
-                set("Authorization", authHeader);
-            }
-        };
-    }
+	HttpHeaders createHeaders(String username, String password) {
+		return new HttpHeaders() {
+			{
+				String auth = username + ":" + password;
+				byte[] encodedAuth = Base64.encode(auth.getBytes(Charset
+						.forName("US-ASCII")));
+				String authHeader = "Basic " + new String(encodedAuth);
+				set("Authorization", authHeader);
+			}
+		};
+	}
 }
