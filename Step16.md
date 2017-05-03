@@ -1,4 +1,4 @@
-##What You Will Learn during this Step:
+## What You Will Learn during this Step:
 - Understand Basics of Profiles
 - Setting a profile
  - Using -Dspring.profiles.active=prod in VM Arguments

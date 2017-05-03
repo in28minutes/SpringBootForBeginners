@@ -1,14 +1,14 @@
-##What You Will Learn during this Step:
+## What You Will Learn during this Step:
 - Understand Starter Parent
 - How to override things defined in Starter Parent
 - Other starter projects
 
-##Starter Parent
+## Starter Parent
 - Dependency Versions
 - Java Versions
 - Default Plugins
 
-##Other Starter Projects
+## Other Starter Projects
 - spring-boot-starter-web-services
 - spring-boot-starter-test
 - spring-boot-starter-jdbc

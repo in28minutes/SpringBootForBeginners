@@ -1,4 +1,4 @@
-##What You Will Learn during this Step:
+## What You Will Learn during this Step:
 - Securing our services with Basic Authentication using Spring Security
 - Executing Requests using Basic Authentication with Postman
  - default user name is user

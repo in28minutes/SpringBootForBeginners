@@ -1,4 +1,4 @@
-##What You Will Learn during this Step:
+## What You Will Learn during this Step:
 - Create a REST Service for Retrieving all questions for a survey
  - Autowire SurveyService
  - Create @GetMapping("/surveys/{surveyId}/questions")
@@ -7,7 +7,7 @@
  - How does the Bean get converted to a JSON?
   - Auto Configuration : If Jackson jar is on the class path, message converters are auto created! (Search in log :Creating shared instance of singleton bean 'mappingJackson2HttpMessageConverter')
 
-##Some Theory
+## Some Theory
 - What is REST?
 - Architectural style for the web. REST specifies a set of constraints.
    - Client - Server : Server (service provider) should be different from a client (service consumer). 
@@ -34,7 +34,7 @@ class SurveyController {
 }
 ```
 
-##Exercise
+## Exercise
 - Try to think about how the URI for retrieving the details of a specific question should be!
 
 ## Files List

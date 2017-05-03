@@ -1,4 +1,4 @@
-##What You Will Learn during this Step:
+## What You Will Learn during this Step:
 - First installment of revealing how magic happens with Spring Boot. As a Spring Boot developer, you need to understand what's happening beneath the hood of Spring Boot! 
 - spring-boot-starter-web : starter for building applications with Spring MVC. Tomcat is default embedded container.
 - We already added this starter in the first step! Now we will explore the features it provides
@@ -15,7 +15,7 @@
  - Look at package org.springframework.boot.autoconfigure.web in spring-boot-autoconfigure-*.jar
 - Go to url http://localhost:8080/some-non-existing-url
 
-##Useful Snippets
+## Useful Snippets
 /src/main/resources/application.properties
 ```
 logging.level.org.springframework: DEBUG

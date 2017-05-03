@@ -1,8 +1,8 @@
-##What You Will Learn during this Step:
+## What You Will Learn during this Step:
 - Spring Boot vs Spring
 - What Spring Boot is Not!
 
-##Spring Boot vs Spring
+## Spring Boot vs Spring
 
 ### Spring
 - Spring is just a dependency injection framework. Spring focuses on the "plumbing" of enterprise applications so that teams can focus on application-level business logic, without unnecessary ties to specific deployment environments.
@@ -41,7 +41,7 @@
   - Be opinionated but provide options.
   - Provide a range of non-functional features that are common to large classes of projects (e.g. embedded servers, security, metrics, health checks, externalized configuration).
 
-####What Spring Boot is NOT?
+#### What Spring Boot is NOT?
 - It’s not an app or a web server
 - Does not implement any specific framework - for example, JPA or JMS
 - Does not generate code

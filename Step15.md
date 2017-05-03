@@ -1,4 +1,4 @@
-##What You Will Learn during this Step:
+## What You Will Learn during this Step:
 - Using Dynamic Configuration in your application
 - Customize Welcome Message
 - Different ways of configuration
@@ -8,7 +8,7 @@
 - Using Placeholders
 - YAML
 
-##Snippets
+## Snippets
 First Snippet
 ```
 logging:

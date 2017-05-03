@@ -1,4 +1,4 @@
-##What You Will Learn during this Step:
+## What You Will Learn during this Step:
 - Even better configuration management than @Value
 - Type-safe Configuration Properties
 - http://localhost:8080/dynamic-configuration

@@ -1,4 +1,4 @@
-##What You Will Learn during this Step:
+## What You Will Learn during this Step:
 - I hate the fact that I've to stop and start the server each time. Can somebody save me?
  - Yeah. Spring Boot Developer Tools
   - By default, any entry on the classpath that points to a folder  will be monitored for changes.

@@ -1,10 +1,10 @@
-##What You Will Learn during this Step:
+## What You Will Learn during this Step:
 - Let's switch back to tomcat first!
 - Get introduced to Spring Data JPA
 - Create a very simple example with Spring Data JPA
 - Use CommandLineRunner!
 
-##Some Notes
+## Some Notes
 - Useful Properties
  - spring.datasource.driver-class-name=com.mysql.jdbc.Driver
  - spring.datasource.url=jdbc:mysql://localhost:3306/test 

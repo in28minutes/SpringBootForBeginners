@@ -1,9 +1,9 @@
-##What You Will Learn during this Step:
+## What You Will Learn during this Step:
 - Look at H2 Console : http://localhost:8080/h2-console
  - Use db url jdbc:h2:mem:testdb
 - Add findByRole method 
 
-##Some Notes
+## Some Notes
 - Useful Properties
  - spring.datasource.driver-class-name=com.mysql.jdbc.Driver
  - spring.datasource.url=jdbc:mysql://localhost:3306/test 

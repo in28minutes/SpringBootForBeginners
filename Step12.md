@@ -1,4 +1,4 @@
-##What You Will Learn during this Step:
+## What You Will Learn during this Step:
 - Spring Initializr
 - https://start.spring.io
 - Create a few projects!

@@ -1,4 +1,4 @@
-##What You Will Learn during this Step:
+## What You Will Learn during this Step:
 - A Deep Dive into Autoconfiguration
  - spring-boot-autoconfigure-1.4.0.RELEASE.jar
   - /META-INF/spring.factories

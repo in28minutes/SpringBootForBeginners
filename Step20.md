@@ -1,4 +1,4 @@
-##What You Will Learn during this Step:
+## What You Will Learn during this Step:
 - Introduction to Spring Data Rest
  - Hit http://localhost:8080/users in POSTMAN
  - http://localhost:8080/users/1
