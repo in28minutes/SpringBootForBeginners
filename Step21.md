@@ -1,7 +1,7 @@
 ## What You Will Learn during this Step:
 - First thing first : I hate the fact that we did not write tests until Step 20 of this course
  - I love TDD and use it in all my projects. However, when learning something new, I think it is important to focus on one thing at a time!
-- You can learn more about unit testing here - https://www.youtube.com/watch?v=o5k9NOR9lrI
+- You can learn more about unit testing here - https://www.youtube.com/playlist?list=PL83C941BB0D27A6AF
 - Let's write a Integration Test for our service 
 
 ## Useful Snippets and References
