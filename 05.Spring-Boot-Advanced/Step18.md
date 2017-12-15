@@ -1,76 +1,134 @@
 ## What You Will Learn during this Step:
-- Write a Unit Test for retrieving a specific question from a survey.
-- Different between Unit Test and Integration Test
-- Basics of Mocking
-- MockMvc framework
-- @MockBean
-- Programming Tip
- - Be an expert at Mockito - https://courses.in28minutes.com/p/mockito-for-beginner-in-5-steps
+- Let's switch back to tomcat first!
+- Get introduced to Spring Data JPA
+- Create a very simple example with Spring Data JPA
+- Use CommandLineRunner!
+
+## Some Notes
+- Useful Properties
+ - spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+ - spring.datasource.url=jdbc:mysql://localhost:3306/test 
+ - spring.datasource.username=root
+ - spring.datasource.password=admin
+ - spring.datasource.initialize=true 
+ - spring.jpa.hibernate.ddl-auto=update
+ - spring.jpa.show-sql=true
 
 ## Useful Snippets and References
-First Snippet
+First Snippet - Add H2 Later after showing the error
 ```
-package com.in28minutes.springboot.controller;
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
 
-import java.util.Arrays;
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+```
+Second Snippet
+```
+package com.in28minutes.springboot.jpa;
 
-import com.in28minutes.springboot.model.Question;
-import com.in28minutes.springboot.service.SurveyService;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = SurveyController.class)
-public class SurveyControllerTest {
+@Entity
+public class User {
 
-	@Autowired
-	private MockMvc mockMvc;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	// Mock @Autowired
-	@MockBean
-	private SurveyService surveyService;
+    private String name;// Not perfect!! Should be a proper object!
+    private String role;// Not perfect!! An enum should be a better choice!
 
-	@Test
-	public void retrieveDetailsForQuestion() throws Exception {
-		Question mockQuestion = new Question("Question1",
-				"Largest Country in the World", "Russia", Arrays.asList(
-						"India", "Russia", "United States", "China"));
+    protected User() {
+    }
 
-		Mockito.when(
-				surveyService.retrieveQuestion(Mockito.anyString(), Mockito
-						.anyString())).thenReturn(mockQuestion);
+    public User(String name, String role) {
+        super();
+        this.name = name;
+        this.role = role;
+    }
 
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-				"/surveys/Survey1/questions/Question1").accept(
-				MediaType.APPLICATION_JSON);
+    public Long getId() {
+        return id;
+    }
 
-		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+    public String getName() {
+        return name;
+    }
 
-		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia}";
+    public String getRole() {
+        return role;
+    }
 
-		JSONAssert.assertEquals(expected, result.getResponse()
-				.getContentAsString(), false);
+    @Override
+    public String toString() {
+        return String.format("User [id=%s, name=%s, role=%s]", id, name, role);
+    }
 
-		// Assert
-	}
 }
 
 ```
+Third Snippet
+```
+package com.in28minutes.springboot.jpa;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+@Component
+public class UserCommandLineRunner implements CommandLineRunner {
+
+    private static final Logger log = LoggerFactory
+            .getLogger(UserCommandLineRunner.class);
+
+    @Autowired
+    private UserRepository repository;
+
+    @Override
+    public void run(String... args) {
+        // save a couple of customers
+        repository.save(new User("Ranga", "Admin"));
+        repository.save(new User("Ravi", "User"));
+        repository.save(new User("Satish", "Admin"));
+        repository.save(new User("Raghu", "User"));
+
+        log.info("-------------------------------");
+        log.info("Finding all users");
+        log.info("-------------------------------");
+        for (User user : repository.findAll()) {
+            log.info(user.toString());
+        }
+
+    }
+
+}
+
+```
+Fourth Snippet
+```
+package com.in28minutes.springboot.jpa;
+
+import java.util.List;
+
+import org.springframework.data.repository.CrudRepository;
+
+public interface UserRepository extends CrudRepository<User, Long> {
+}
+```
 
 ## Exercises
-- Write unit test for retrieve all questions for a survey
+- Look at other methods provided by the UserRepository
 
 ## Files List
 ### pom.xml
@@ -103,11 +161,6 @@ public class SurveyControllerTest {
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-rest</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
@@ -128,11 +181,6 @@ public class SurveyControllerTest {
 			<artifactId>spring-data-rest-hal-browser</artifactId>
 		</dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
 	</dependencies>
 
 	<build>
@@ -365,23 +413,6 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, Long> {
-	List<User> findByRole(String role);
-}
-```
-### src/main/java/com/in28minutes/springboot/jpa/UserRestRepository.java
-```
-package com.in28minutes.springboot.jpa;
-
-import java.util.List;
-
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-
-@RepositoryRestResource(path = "users", collectionResourceRel = "users")
-public interface UserRestRepository extends
-		PagingAndSortingRepository<User, Long> {
-	List<User> findByRole(@Param("role") String role);
 }
 ```
 ### src/main/java/com/in28minutes/springboot/model/Question.java
@@ -704,164 +735,4 @@ welcome.message=Welcome message from property file! Welcome to ${app.name}
 basic.value=true
 basic.message=Welcome to in28minutes
 basic.number=200
-```
-### src/test/java/com/in28minutes/springboot/controller/SurveyControllerIT.java
-```
-package com.in28minutes.springboot.controller;
-
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.boot.context.embedded.LocalServerPort;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import com.in28minutes.springboot.Application;
-import com.in28minutes.springboot.model.Question;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class,
-		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SurveyControllerIT {
-
-	@LocalServerPort
-	private int port;
-
-	TestRestTemplate restTemplate = new TestRestTemplate();
-
-	HttpHeaders headers = new HttpHeaders();
-
-	@Before
-	public void before() {
-
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-
-	}
-
-	@Test
-	public void testRetrieveSurveyQuestion() {
-
-		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-
-		ResponseEntity<String> response = restTemplate.exchange(
-				createURLWithPort("/surveys/Survey1/questions/Question1"),
-				HttpMethod.GET, entity, String.class);
-
-		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia}";
-
-		JSONAssert.assertEquals(expected, response.getBody(), false);
-	}
-
-	@Test
-	public void retrieveAllSurveyQuestions() throws Exception {
-
-		ResponseEntity<List<Question>> response = restTemplate.exchange(
-				createURLWithPort("/surveys/Survey1/questions"),
-				HttpMethod.GET, new HttpEntity<String>("DUMMY_DOESNT_MATTER",
-						headers),
-				new ParameterizedTypeReference<List<Question>>() {
-				});
-
-		Question sampleQuestion = new Question("Question1",
-				"Largest Country in the World", "Russia", Arrays.asList(
-						"India", "Russia", "United States", "China"));
-
-		assertTrue(response.getBody().contains(sampleQuestion));
-	}
-
-	@Test
-	public void addQuestion() {
-
-		Question question = new Question("DOESNTMATTER", "Question1", "Russia",
-				Arrays.asList("India", "Russia", "United States", "China"));
-
-		HttpEntity entity = new HttpEntity<Question>(question, headers);
-
-		ResponseEntity<String> response = restTemplate.exchange(
-				createURLWithPort("/surveys/Survey1/questions"),
-				HttpMethod.POST, entity, String.class);
-
-		String actual = response.getHeaders().get(HttpHeaders.LOCATION).get(0);
-
-		assertTrue(actual.contains("/surveys/Survey1/questions/"));
-
-	}
-
-	private String createURLWithPort(final String uri) {
-		return "http://localhost:" + port + uri;
-	}
-
-}
-```
-### src/test/java/com/in28minutes/springboot/controller/SurveyControllerTest.java
-```
-package com.in28minutes.springboot.controller;
-
-import java.util.Arrays;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import com.in28minutes.springboot.model.Question;
-import com.in28minutes.springboot.service.SurveyService;
-
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = SurveyController.class)
-public class SurveyControllerTest {
-
-	@Autowired
-	private MockMvc mockMvc;
-
-	// Mock @Autowired
-	@MockBean
-	private SurveyService surveyService;
-
-	@Test
-	public void retrieveDetailsForQuestion() throws Exception {
-		Question mockQuestion = new Question("Question1",
-				"Largest Country in the World", "Russia", Arrays.asList(
-						"India", "Russia", "United States", "China"));
-
-		Mockito.when(
-				surveyService.retrieveQuestion(Mockito.anyString(), Mockito
-						.anyString())).thenReturn(mockQuestion);
-
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-				"/surveys/Survey1/questions/Question1").accept(
-				MediaType.APPLICATION_JSON);
-
-		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia}";
-
-		JSONAssert.assertEquals(expected, result.getResponse()
-				.getContentAsString(), false);
-
-		// Assert
-	}
-}
 ```

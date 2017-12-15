@@ -1,76 +1,101 @@
 ## What You Will Learn during this Step:
-- Write a Unit Test for retrieving a specific question from a survey.
-- Different between Unit Test and Integration Test
-- Basics of Mocking
-- MockMvc framework
-- @MockBean
-- Programming Tip
- - Be an expert at Mockito - https://courses.in28minutes.com/p/mockito-for-beginner-in-5-steps
+- Even better configuration management than @Value
+- Type-safe Configuration Properties
+- http://localhost:8080/dynamic-configuration
+- Also look at http://localhost:8080/actuator/#http://localhost:8080/configprops
 
 ## Useful Snippets and References
 First Snippet
 ```
-package com.in28minutes.springboot.controller;
+package com.in28minutes.springboot.configuration;
 
-import java.util.Arrays;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+@Component
+@ConfigurationProperties("basic")
+public class BasicConfiguration {
+    private boolean value;
+    private String message;
+    private int number;
 
-import com.in28minutes.springboot.model.Question;
-import com.in28minutes.springboot.service.SurveyService;
+    public boolean isValue() {
+        return value;
+    }
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = SurveyController.class)
-public class SurveyControllerTest {
+    public void setValue(boolean value) {
+        this.value = value;
+    }
 
-	@Autowired
-	private MockMvc mockMvc;
+    public String getMessage() {
+        return message;
+    }
 
-	// Mock @Autowired
-	@MockBean
-	private SurveyService surveyService;
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-	@Test
-	public void retrieveDetailsForQuestion() throws Exception {
-		Question mockQuestion = new Question("Question1",
-				"Largest Country in the World", "Russia", Arrays.asList(
-						"India", "Russia", "United States", "China"));
+    public int getNumber() {
+        return number;
+    }
 
-		Mockito.when(
-				surveyService.retrieveQuestion(Mockito.anyString(), Mockito
-						.anyString())).thenReturn(mockQuestion);
+    public void setNumber(int number) {
+        this.number = number;
+    }
 
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-				"/surveys/Survey1/questions/Question1").accept(
-				MediaType.APPLICATION_JSON);
-
-		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia}";
-
-		JSONAssert.assertEquals(expected, result.getResponse()
-				.getContentAsString(), false);
-
-		// Assert
-	}
 }
 
 ```
+Second Snippet
+```
+        @Autowired
+        private BasicConfiguration configuration;
+
+        @RequestMapping("/dynamic-configuration")
+        public Map dynamicConfiguration() {
+            // Not the best practice to use a map to store differnt types!
+            Map map = new HashMap();
+            map.put("message", configuration.getMessage());
+            map.put("number", configuration.getNumber());
+            map.put("key", configuration.isValue());
+            return map;
+        }
+
+```
+Third Snippet
+```
+basic.value: true
+basic.message: Dynamic Message
+basic.number: 100
+```
+Fourth Snippet
+```
+basic: 
+   value: true
+   message: Dynamic Message YAML
+   number: 100
+```
 
 ## Exercises
-- Write unit test for retrieve all questions for a survey
+- Understand Type Safety
+```
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Binding to target com.in28minutes.springboot.configuration.BasicConfiguration@391b8545 failed:
+
+    Property: basic.number
+    Value: ABC
+    Reason: Failed to convert property value of type [java.lang.String] to required type [int] for property 'number'; nested exception is org.springframework.core.convert.ConverterNotFoundException: No converter found capable of converting from type [java.lang.String] to type [int]
+
+
+Action:
+
+Update your application's configuration
+```
 
 ## Files List
 ### pom.xml
@@ -95,21 +120,17 @@ public class SurveyControllerTest {
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-rest</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
 		</dependency>
 
 		<dependency>
@@ -128,11 +149,6 @@ public class SurveyControllerTest {
 			<artifactId>spring-data-rest-hal-browser</artifactId>
 		</dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
 	</dependencies>
 
 	<build>
@@ -266,122 +282,6 @@ class SurveyController {
 		return ResponseEntity.created(location).build();
 	}
 
-}
-```
-### src/main/java/com/in28minutes/springboot/jpa/User.java
-```
-package com.in28minutes.springboot.jpa;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
-public class User {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-
-	private String name;
-	private String role;
-
-	protected User() {
-	}
-
-	public User(String name, String role) {
-		super();
-		this.name = name;
-		this.role = role;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", role=" + role + "]";
-	}
-
-}
-```
-### src/main/java/com/in28minutes/springboot/jpa/UserCommandLineRunner.java
-```
-package com.in28minutes.springboot.jpa;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
-
-@Component
-public class UserCommandLineRunner implements CommandLineRunner {
-
-	private static final Logger log = LoggerFactory
-			.getLogger(UserCommandLineRunner.class);
-
-	@Autowired
-	private UserRepository repository;
-
-	@Override
-	public void run(String... args) throws Exception {
-
-		repository.save(new User("Ranga", "Admin"));
-		repository.save(new User("Ravi", "User"));
-		repository.save(new User("Satish", "Admin"));
-		repository.save(new User("Raghu", "User"));
-
-		for (User user : repository.findAll()) {
-			log.info(user.toString());
-		}
-
-		log.info("Admin users are.....");
-		log.info("____________________");
-		for (User user : repository.findByRole("Admin")) {
-			log.info(user.toString());
-		}
-
-	}
-
-}
-```
-### src/main/java/com/in28minutes/springboot/jpa/UserRepository.java
-```
-package com.in28minutes.springboot.jpa;
-
-import java.util.List;
-
-import org.springframework.data.repository.CrudRepository;
-
-public interface UserRepository extends CrudRepository<User, Long> {
-	List<User> findByRole(String role);
-}
-```
-### src/main/java/com/in28minutes/springboot/jpa/UserRestRepository.java
-```
-package com.in28minutes.springboot.jpa;
-
-import java.util.List;
-
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-
-@RepositoryRestResource(path = "users", collectionResourceRel = "users")
-public interface UserRestRepository extends
-		PagingAndSortingRepository<User, Long> {
-	List<User> findByRole(@Param("role") String role);
 }
 ```
 ### src/main/java/com/in28minutes/springboot/model/Question.java
@@ -704,164 +604,4 @@ welcome.message=Welcome message from property file! Welcome to ${app.name}
 basic.value=true
 basic.message=Welcome to in28minutes
 basic.number=200
-```
-### src/test/java/com/in28minutes/springboot/controller/SurveyControllerIT.java
-```
-package com.in28minutes.springboot.controller;
-
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.boot.context.embedded.LocalServerPort;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import com.in28minutes.springboot.Application;
-import com.in28minutes.springboot.model.Question;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class,
-		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SurveyControllerIT {
-
-	@LocalServerPort
-	private int port;
-
-	TestRestTemplate restTemplate = new TestRestTemplate();
-
-	HttpHeaders headers = new HttpHeaders();
-
-	@Before
-	public void before() {
-
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-
-	}
-
-	@Test
-	public void testRetrieveSurveyQuestion() {
-
-		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-
-		ResponseEntity<String> response = restTemplate.exchange(
-				createURLWithPort("/surveys/Survey1/questions/Question1"),
-				HttpMethod.GET, entity, String.class);
-
-		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia}";
-
-		JSONAssert.assertEquals(expected, response.getBody(), false);
-	}
-
-	@Test
-	public void retrieveAllSurveyQuestions() throws Exception {
-
-		ResponseEntity<List<Question>> response = restTemplate.exchange(
-				createURLWithPort("/surveys/Survey1/questions"),
-				HttpMethod.GET, new HttpEntity<String>("DUMMY_DOESNT_MATTER",
-						headers),
-				new ParameterizedTypeReference<List<Question>>() {
-				});
-
-		Question sampleQuestion = new Question("Question1",
-				"Largest Country in the World", "Russia", Arrays.asList(
-						"India", "Russia", "United States", "China"));
-
-		assertTrue(response.getBody().contains(sampleQuestion));
-	}
-
-	@Test
-	public void addQuestion() {
-
-		Question question = new Question("DOESNTMATTER", "Question1", "Russia",
-				Arrays.asList("India", "Russia", "United States", "China"));
-
-		HttpEntity entity = new HttpEntity<Question>(question, headers);
-
-		ResponseEntity<String> response = restTemplate.exchange(
-				createURLWithPort("/surveys/Survey1/questions"),
-				HttpMethod.POST, entity, String.class);
-
-		String actual = response.getHeaders().get(HttpHeaders.LOCATION).get(0);
-
-		assertTrue(actual.contains("/surveys/Survey1/questions/"));
-
-	}
-
-	private String createURLWithPort(final String uri) {
-		return "http://localhost:" + port + uri;
-	}
-
-}
-```
-### src/test/java/com/in28minutes/springboot/controller/SurveyControllerTest.java
-```
-package com.in28minutes.springboot.controller;
-
-import java.util.Arrays;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import com.in28minutes.springboot.model.Question;
-import com.in28minutes.springboot.service.SurveyService;
-
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = SurveyController.class)
-public class SurveyControllerTest {
-
-	@Autowired
-	private MockMvc mockMvc;
-
-	// Mock @Autowired
-	@MockBean
-	private SurveyService surveyService;
-
-	@Test
-	public void retrieveDetailsForQuestion() throws Exception {
-		Question mockQuestion = new Question("Question1",
-				"Largest Country in the World", "Russia", Arrays.asList(
-						"India", "Russia", "United States", "China"));
-
-		Mockito.when(
-				surveyService.retrieveQuestion(Mockito.anyString(), Mockito
-						.anyString())).thenReturn(mockQuestion);
-
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-				"/surveys/Survey1/questions/Question1").accept(
-				MediaType.APPLICATION_JSON);
-
-		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia}";
-
-		JSONAssert.assertEquals(expected, result.getResponse()
-				.getContentAsString(), false);
-
-		// Assert
-	}
-}
 ```

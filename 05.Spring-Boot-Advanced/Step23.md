@@ -1,76 +1,9 @@
 ## What You Will Learn during this Step:
-- Write a Unit Test for retrieving a specific question from a survey.
-- Different between Unit Test and Integration Test
-- Basics of Mocking
-- MockMvc framework
-- @MockBean
-- Programming Tip
- - Be an expert at Mockito - https://courses.in28minutes.com/p/mockito-for-beginner-in-5-steps
-
-## Useful Snippets and References
-First Snippet
-```
-package com.in28minutes.springboot.controller;
-
-import java.util.Arrays;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import com.in28minutes.springboot.model.Question;
-import com.in28minutes.springboot.service.SurveyService;
-
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = SurveyController.class)
-public class SurveyControllerTest {
-
-	@Autowired
-	private MockMvc mockMvc;
-
-	// Mock @Autowired
-	@MockBean
-	private SurveyService surveyService;
-
-	@Test
-	public void retrieveDetailsForQuestion() throws Exception {
-		Question mockQuestion = new Question("Question1",
-				"Largest Country in the World", "Russia", Arrays.asList(
-						"India", "Russia", "United States", "China"));
-
-		Mockito.when(
-				surveyService.retrieveQuestion(Mockito.anyString(), Mockito
-						.anyString())).thenReturn(mockQuestion);
-
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-				"/surveys/Survey1/questions/Question1").accept(
-				MediaType.APPLICATION_JSON);
-
-		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia}";
-
-		JSONAssert.assertEquals(expected, result.getResponse()
-				.getContentAsString(), false);
-
-		// Assert
-	}
-}
-
-```
+- Lets do some cleanup
+ - Lets Refactor the SurveyControllerIT.java
 
 ## Exercises
-- Write unit test for retrieve all questions for a survey
+- Test and make sure everything is working fine
 
 ## Files List
 ### pom.xml
@@ -804,64 +737,5 @@ public class SurveyControllerIT {
 		return "http://localhost:" + port + uri;
 	}
 
-}
-```
-### src/test/java/com/in28minutes/springboot/controller/SurveyControllerTest.java
-```
-package com.in28minutes.springboot.controller;
-
-import java.util.Arrays;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import com.in28minutes.springboot.model.Question;
-import com.in28minutes.springboot.service.SurveyService;
-
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = SurveyController.class)
-public class SurveyControllerTest {
-
-	@Autowired
-	private MockMvc mockMvc;
-
-	// Mock @Autowired
-	@MockBean
-	private SurveyService surveyService;
-
-	@Test
-	public void retrieveDetailsForQuestion() throws Exception {
-		Question mockQuestion = new Question("Question1",
-				"Largest Country in the World", "Russia", Arrays.asList(
-						"India", "Russia", "United States", "China"));
-
-		Mockito.when(
-				surveyService.retrieveQuestion(Mockito.anyString(), Mockito
-						.anyString())).thenReturn(mockQuestion);
-
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-				"/surveys/Survey1/questions/Question1").accept(
-				MediaType.APPLICATION_JSON);
-
-		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia}";
-
-		JSONAssert.assertEquals(expected, result.getResponse()
-				.getContentAsString(), false);
-
-		// Assert
-	}
 }
 ```

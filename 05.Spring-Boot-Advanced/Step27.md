@@ -1,77 +1,61 @@
 ## What You Will Learn during this Step:
-- Write a Unit Test for retrieving a specific question from a survey.
-- Different between Unit Test and Integration Test
-- Basics of Mocking
-- MockMvc framework
-- @MockBean
-- Programming Tip
- - Be an expert at Mockito - https://courses.in28minutes.com/p/mockito-for-beginner-in-5-steps
+- Configure different user roles for survey and other services
+- Update integration tests
+- Update unit tests
 
 ## Useful Snippets and References
 First Snippet
 ```
-package com.in28minutes.springboot.controller;
+package com.in28minutes.springboot.security;
 
-import java.util.Arrays;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth)
+            throws Exception {
+        auth.inMemoryAuthentication().withUser("user1").password("secret1")
+                .roles("USER").and().withUser("admin1").password("secret1")
+                .roles("ADMIN");
+    }
 
-import com.in28minutes.springboot.model.Question;
-import com.in28minutes.springboot.service.SurveyService;
-
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = SurveyController.class)
-public class SurveyControllerTest {
-
-	@Autowired
-	private MockMvc mockMvc;
-
-	// Mock @Autowired
-	@MockBean
-	private SurveyService surveyService;
-
-	@Test
-	public void retrieveDetailsForQuestion() throws Exception {
-		Question mockQuestion = new Question("Question1",
-				"Largest Country in the World", "Russia", Arrays.asList(
-						"India", "Russia", "United States", "China"));
-
-		Mockito.when(
-				surveyService.retrieveQuestion(Mockito.anyString(), Mockito
-						.anyString())).thenReturn(mockQuestion);
-
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-				"/surveys/Survey1/questions/Question1").accept(
-				MediaType.APPLICATION_JSON);
-
-		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia}";
-
-		JSONAssert.assertEquals(expected, result.getResponse()
-				.getContentAsString(), false);
-
-		// Assert
-	}
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.httpBasic().and().authorizeRequests().antMatchers("/surveys/**")
+        .hasRole("USER").antMatchers("/users/**").hasRole("USER")
+                .antMatchers("/**").hasRole("ADMIN").and().csrf().disable()
+                .headers().frameOptions().disable();
+    }
 }
+```
+Second Snippet
+```
+    HttpHeaders headers = createHeaders("user1", "secret1");
+
+    HttpHeaders createHeaders(String username, String password) {
+        return new HttpHeaders() {
+            {
+                String auth = username + ":" + password;
+                byte[] encodedAuth = Base64.encode(auth.getBytes(Charset
+                        .forName("US-ASCII")));
+                String authHeader = "Basic " + new String(encodedAuth);
+                set("Authorization", authHeader);
+            }
+        };
+    }
 
 ```
 
-## Exercises
-- Write unit test for retrieve all questions for a survey
-
+Third Snippet
+```
+@WebMvcTest(value = SurveyController.class, secure = false)
+```
 ## Files List
 ### pom.xml
 ```
@@ -95,6 +79,11 @@ public class SurveyControllerTest {
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
 		<dependency>
@@ -529,6 +518,36 @@ public class Survey {
 
 }
 ```
+### src/main/java/com/in28minutes/springboot/security/SecurityConfig.java
+```
+package com.in28minutes.springboot.security;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	// Authentication : User --> Roles
+	protected void configure(AuthenticationManagerBuilder auth)
+			throws Exception {
+		auth.inMemoryAuthentication().withUser("user1").password("secret1")
+				.roles("USER").and().withUser("admin1").password("secret1")
+				.roles("USER", "ADMIN");
+	}
+
+	// Authorization : Role -> Access
+	// survey -> USER
+	protected void configure(HttpSecurity http) throws Exception {
+		http.httpBasic().and().authorizeRequests().antMatchers("/surveys/**")
+				.hasRole("USER").antMatchers("/users/**").hasRole("USER")
+				.antMatchers("/**").hasRole("ADMIN").and().csrf().disable()
+				.headers().frameOptions().disable();
+	}
+
+}
+```
 ### src/main/java/com/in28minutes/springboot/service/SurveyService.java
 ```
 package com.in28minutes.springboot.service;
@@ -711,6 +730,7 @@ package com.in28minutes.springboot.controller;
 
 import static org.junit.Assert.assertTrue;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -727,6 +747,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.in28minutes.springboot.Application;
@@ -746,9 +767,9 @@ public class SurveyControllerIT {
 
 	@Before
 	public void before() {
-
+		headers.add("Authorization", createHttpAuthenticationHeaderValue(
+				"user1", "secret1"));
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-
 	}
 
 	@Test
@@ -804,11 +825,26 @@ public class SurveyControllerIT {
 		return "http://localhost:" + port + uri;
 	}
 
+	private String createHttpAuthenticationHeaderValue(String userId,
+			String password) {
+
+		String auth = userId + ":" + password;
+
+		byte[] encodedAuth = Base64.encode(auth.getBytes(Charset
+				.forName("US-ASCII")));
+
+		String headerValue = "Basic " + new String(encodedAuth);
+
+		return headerValue;
+	}
+
 }
 ```
 ### src/test/java/com/in28minutes/springboot/controller/SurveyControllerTest.java
 ```
 package com.in28minutes.springboot.controller;
+
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 
@@ -819,7 +855,10 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -830,7 +869,7 @@ import com.in28minutes.springboot.model.Question;
 import com.in28minutes.springboot.service.SurveyService;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = SurveyController.class)
+@WebMvcTest(value = SurveyController.class, secure = false)
 public class SurveyControllerTest {
 
 	@Autowired
@@ -862,6 +901,33 @@ public class SurveyControllerTest {
 				.getContentAsString(), false);
 
 		// Assert
+	}
+
+	@Test
+	public void createSurveyQuestion() throws Exception {
+		Question mockQuestion = new Question("1", "Smallest Number", "1",
+				Arrays.asList("1", "2", "3", "4"));
+
+		String questionJson = "{\"description\":\"Smallest Number\",\"correctAnswer\":\"1\",\"options\":[\"1\",\"2\",\"3\",\"4\"]}";
+		//surveyService.addQuestion to respond back with mockQuestion
+		Mockito.when(
+				surveyService.addQuestion(Mockito.anyString(), Mockito
+						.any(Question.class))).thenReturn(mockQuestion);
+
+		//Send question as body to /surveys/Survey1/questions
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(
+				"/surveys/Survey1/questions")
+				.accept(MediaType.APPLICATION_JSON).content(questionJson)
+				.contentType(MediaType.APPLICATION_JSON);
+
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+		MockHttpServletResponse response = result.getResponse();
+
+		assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+
+		assertEquals("http://localhost/surveys/Survey1/questions/1", response
+				.getHeader(HttpHeaders.LOCATION));
 	}
 }
 ```

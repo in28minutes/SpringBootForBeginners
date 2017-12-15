@@ -1,76 +1,71 @@
 ## What You Will Learn during this Step:
-- Write a Unit Test for retrieving a specific question from a survey.
-- Different between Unit Test and Integration Test
-- Basics of Mocking
-- MockMvc framework
-- @MockBean
-- Programming Tip
- - Be an expert at Mockito - https://courses.in28minutes.com/p/mockito-for-beginner-in-5-steps
+- Exercise from previous step
+- Integration Test for POST Request - Add To do
 
 ## Useful Snippets and References
 First Snippet
 ```
-package com.in28minutes.springboot.controller;
+    @Test
+    public void retrieveSurveyQuestions() throws Exception {
+        ResponseEntity<List<Question>> response = template.exchange(
+                createUrl("/surveys/Survey1/questions/"), HttpMethod.GET,
+                new HttpEntity<String>("DUMMY_DOESNT_MATTER", headers),
+                new ParameterizedTypeReference<List<Question>>() {
+                });
 
-import java.util.Arrays;
+        Question sampleQuestion = new Question("Question1",
+                "Largest Country in the World", "Russia", Arrays.asList(
+                        "India", "Russia", "United States", "China"));
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+        assertTrue(response.getBody().contains(sampleQuestion));
+    }
 
-import com.in28minutes.springboot.model.Question;
-import com.in28minutes.springboot.service.SurveyService;
-
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = SurveyController.class)
-public class SurveyControllerTest {
-
-	@Autowired
-	private MockMvc mockMvc;
-
-	// Mock @Autowired
-	@MockBean
-	private SurveyService surveyService;
-
+```
+Before Refactoring Snippet
+```
+	//NEEDS REFACTORING
 	@Test
-	public void retrieveDetailsForQuestion() throws Exception {
-		Question mockQuestion = new Question("Question1",
+	public void retrieveAllSurveyQuestions() throws Exception {
+
+		String url = "http://localhost:" + port + "/surveys/Survey1/questions";
+
+		TestRestTemplate restTemplate = new TestRestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+		ResponseEntity<List<Question>> response = restTemplate.exchange(url,
+				HttpMethod.GET, new HttpEntity<String>("DUMMY_DOESNT_MATTER",
+						headers),
+				new ParameterizedTypeReference<List<Question>>() {
+				});
+
+		Question sampleQuestion = new Question("Question1",
 				"Largest Country in the World", "Russia", Arrays.asList(
 						"India", "Russia", "United States", "China"));
 
-		Mockito.when(
-				surveyService.retrieveQuestion(Mockito.anyString(), Mockito
-						.anyString())).thenReturn(mockQuestion);
-
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-				"/surveys/Survey1/questions/Question1").accept(
-				MediaType.APPLICATION_JSON);
-
-		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia}";
-
-		JSONAssert.assertEquals(expected, result.getResponse()
-				.getContentAsString(), false);
-
-		// Assert
+		assertTrue(response.getBody().contains(sampleQuestion));
 	}
-}
 
 ```
+After Refactoring Snippet - We will discuss this in Step 23
+```
 
-## Exercises
-- Write unit test for retrieve all questions for a survey
+    @Test
+    public void createSurveyQuestion() throws Exception {
+        Question question = new Question("DOESN'T MATTER", "Smallest Number",
+                "1", Arrays.asList("1", "2", "3", "4"));
+
+        ResponseEntity<String> response = template.exchange(
+                createUrl("/surveys/Survey1/questions/"), HttpMethod.POST,
+                new HttpEntity<Question>(question, headers), String.class);
+
+        assertThat(response.getHeaders().get(HttpHeaders.LOCATION).get(0),
+                containsString("/surveys/Survey1/questions/"));
+    }
+
+```
 
 ## Files List
 ### pom.xml
@@ -714,7 +709,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -740,24 +734,22 @@ public class SurveyControllerIT {
 	@LocalServerPort
 	private int port;
 
-	TestRestTemplate restTemplate = new TestRestTemplate();
-
-	HttpHeaders headers = new HttpHeaders();
-
-	@Before
-	public void before() {
-
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-
-	}
-
+	//NEEDS REFACTORING
 	@Test
 	public void testRetrieveSurveyQuestion() {
 
+		String url = "http://localhost:" + port
+				+ "/surveys/Survey1/questions/Question1";
+
+		TestRestTemplate restTemplate = new TestRestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
-		ResponseEntity<String> response = restTemplate.exchange(
-				createURLWithPort("/surveys/Survey1/questions/Question1"),
+		ResponseEntity<String> response = restTemplate.exchange(url,
 				HttpMethod.GET, entity, String.class);
 
 		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia}";
@@ -765,11 +757,19 @@ public class SurveyControllerIT {
 		JSONAssert.assertEquals(expected, response.getBody(), false);
 	}
 
+	//NEEDS REFACTORING
 	@Test
 	public void retrieveAllSurveyQuestions() throws Exception {
 
-		ResponseEntity<List<Question>> response = restTemplate.exchange(
-				createURLWithPort("/surveys/Survey1/questions"),
+		String url = "http://localhost:" + port + "/surveys/Survey1/questions";
+
+		TestRestTemplate restTemplate = new TestRestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+		ResponseEntity<List<Question>> response = restTemplate.exchange(url,
 				HttpMethod.GET, new HttpEntity<String>("DUMMY_DOESNT_MATTER",
 						headers),
 				new ParameterizedTypeReference<List<Question>>() {
@@ -782,16 +782,24 @@ public class SurveyControllerIT {
 		assertTrue(response.getBody().contains(sampleQuestion));
 	}
 
+	//NEEDS REFACTORING
 	@Test
 	public void addQuestion() {
+
+		String url = "http://localhost:" + port + "/surveys/Survey1/questions";
+
+		TestRestTemplate restTemplate = new TestRestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
 		Question question = new Question("DOESNTMATTER", "Question1", "Russia",
 				Arrays.asList("India", "Russia", "United States", "China"));
 
 		HttpEntity entity = new HttpEntity<Question>(question, headers);
 
-		ResponseEntity<String> response = restTemplate.exchange(
-				createURLWithPort("/surveys/Survey1/questions"),
+		ResponseEntity<String> response = restTemplate.exchange(url,
 				HttpMethod.POST, entity, String.class);
 
 		String actual = response.getHeaders().get(HttpHeaders.LOCATION).get(0);
@@ -800,68 +808,5 @@ public class SurveyControllerIT {
 
 	}
 
-	private String createURLWithPort(final String uri) {
-		return "http://localhost:" + port + uri;
-	}
-
-}
-```
-### src/test/java/com/in28minutes/springboot/controller/SurveyControllerTest.java
-```
-package com.in28minutes.springboot.controller;
-
-import java.util.Arrays;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import com.in28minutes.springboot.model.Question;
-import com.in28minutes.springboot.service.SurveyService;
-
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = SurveyController.class)
-public class SurveyControllerTest {
-
-	@Autowired
-	private MockMvc mockMvc;
-
-	// Mock @Autowired
-	@MockBean
-	private SurveyService surveyService;
-
-	@Test
-	public void retrieveDetailsForQuestion() throws Exception {
-		Question mockQuestion = new Question("Question1",
-				"Largest Country in the World", "Russia", Arrays.asList(
-						"India", "Russia", "United States", "China"));
-
-		Mockito.when(
-				surveyService.retrieveQuestion(Mockito.anyString(), Mockito
-						.anyString())).thenReturn(mockQuestion);
-
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-				"/surveys/Survey1/questions/Question1").accept(
-				MediaType.APPLICATION_JSON);
-
-		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia}";
-
-		JSONAssert.assertEquals(expected, result.getResponse()
-				.getContentAsString(), false);
-
-		// Assert
-	}
 }
 ```

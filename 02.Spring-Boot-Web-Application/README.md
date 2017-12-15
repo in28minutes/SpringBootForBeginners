@@ -1,10 +1,7 @@
-# SpringBootForBeginners
-Spring Boot Tutorial For Beginners
+# Your First Web Application with Spring Boot
+Develop your first web application with Spring Boot in more than 25 steps
 * [Installing Eclipse, Maven and Java](#installing-tools)
-* [Running Examples](#running-examples)
 * [Course Overview](#course-overview)
-  - [Course Steps](#step-list)
-  - [Expectations](#expectations)
 * [About in28Minutes](#about-in28minutes)
   - [Our Beliefs](#our-beliefs)
   - [Our Approach](#our-approach)
@@ -19,84 +16,71 @@ Spring Boot Tutorial For Beginners
 ## Course Overview
 
 ### Introduction
-
-Spring Boot has a lot of magic going for it. Developing Services with it is cool and fun.
-
-Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications that you can “just run”. Most Spring Boot applications need very little Spring configuration.
-
-In this course, you will learn the cool things about Spring Boot and Spring Boot Starter Projects. We will develop a basic REST Service to manage questions of a survey.
-
-You will learn about Spring Boot step by step - in more than 25 steps. This course would be a perfect first step as an introduction to Spring Boot.
-
-You will be using Spring Boot and get introduced to REST Services, Spring Security (Authentication and Authorization), Maven (dependencies management), Eclipse (IDE) and Tomcat Embedded Web Server. We will help you set up each one of these.
-
-You will learn about
-
-- Basics of Spring Boot
-- Basics of Auto Configuration and Spring Boot Magic
-- Spring Boot Starter Projects
-- Spring Initializr
-- Basic REST Services using Spring Boot Starter Web
-- REST Service Content Negotiation with JSON and XML
-- Embedded servlet containers : Tomcat, Jetty and Undertow
-- Writing Unit and Integration tests using Spring Boot Starter Test
-- Profiles and Dynamic Configuration with Spring Boot
-- Spring Boot Data JPA
-- Spring Boot Actuator
-- Spring Security
-- Spring Boot Developer Tools and LiveReload
+Developing your first Spring Boot Web Application is fun.
 
 Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications that you can “just run”. We take an opinionated view of the Spring platform and third-party libraries so you can get started with minimum fuss. Most Spring Boot applications need very little Spring configuration.
 
-With Microservices, focus is shifting to getting started with developing web applications quickly. Spring Boot enables this.
+In this course, you will learn the basics developing a Basic Todo Management Application using Spring Boot with Login and Logout functionalities.
 
+You will build the website step by step - in more than 25 steps. This course would be a perfect first step as an introduction to Java Web Application Development.
 
-### Goals
-- Provide quick start for projects with Spring.
-- Be opinionated but provide options.
-- Provide a range of non-functional features that are common to large classes of projects (e.g. embedded servers, security, metrics, health checks, externalized configuration).
-- Absolutely no code generation and no requirement for XML configuration.
+You will be using Spring (Dependency Management), Spring MVC, Spring Boot, Spring Security (Authentication and Authorization), BootStrap (Styling Pages), Maven (dependencies management), Eclipse (IDE) and Tomcat Embedded Web Server. We will help you set up each one of these.
 
-### Step List
-- Step 01: Setup and Launch Spring Boot Application with Maven and Eclipse
-- Step 02: Creating your first RestController
-- Step 03: Understanding Spring Boot Magic : Spring Boot Starter Web
-- Step 04: Understanding Spring Boot Magic : Spring Boot Starter Parent
-- Step 05: Spring Boot vs Spring
-- Step 06: Create all Services for Survey and Questions
-- Step 07: What is REST? Creating REST Service with @GetMapping and @PathVariable
-- Step 08: Second REST Service to retrieve a specific question
-- Step 09: Spring Boot Developer Tools and LiveReload : Develop faster!
-- Step 10: Create a REST Service to add a new question to survey : @PostMapping, Postman 
-- Step 11: Understand Content Negotiation. Deliver XML Responses from the REST Services
-- Step 12: Spring Initializr : Create Spring Boot Projects on the fly!
-- Step 13: Spring Boot Actuator : Monitor your Spring Boot applications!
-- Step 14: Understanding Embedded servlet containers : Switch to Jetty or Undertow
-- Step 15: Adding Dynamic Configuration to your application : YAML & More..
-- Step 16: Basics of Profiles
-- Step 17: Advanced Application Configuration with Type Safe Configuration Properties
-- Step 18: Spring Boot Starter : Spring Data JPA with CommandLineRunner
-- Step 19: In Memory Database H2 Console and add a new JPA Repository Method
-- Step 20: Spring Boot Starter : Introduction to Spring Data Rest
-- Step 21: Spring Boot Integration Test
-- Step 22: Adding Integration Test for POST Request
-- Step 23: Small Refactoring to organise ourselves
-- Step 24: Writing Unit Tests with Spring Boot and Mockito
-- Step 25: Writing Unit test for createTodo
-- Step 26: Securing our services with Basic Authentication using Spring Security
-- Step 27: Configure Spring Security user roles for survey and other services
-- Step 28: A Deep Dive into Spring Boot Auto Configuration
+You will learn about
+- Basics of Spring Boot
+- Basics of Autoconfiguration and Spring Boot Magic
+- DispatcherServlet
+- Basic Todo Management Application with Login/Logout
+- Model, Controllers, ViewResolver and Filters
+- Forms - DataBinding, Validation
+- Annotation based approach - @RequestParam, @ModelAttribute, @SessionAttributes etc
+- Bootstrap to style the page
+- Spring Security
+- Exception Handling
+
+### Step Wise Details
+- Step 01: Basic Spring Boot Web Application Setup
+- Step 02: First Spring MVC Controller, @ResponseBody, @Controller
+- Step 03: Demystifying some of the Spring Boot magic
+- Step 04: Redirect to Login JSP - LoginController, @ResponseBody and View Resolver
+- Step 05: Show userid and password on the welcome page - ModelMap and @RequestParam
+- Step 06: DispatcherServlet and Spring MVC Flow
+- Step 07: Your First HTML form
+- Step 08: Add hard-coded validation of userid and password
+- Step 09: Magic of Spring
+- Step 10: Create TodoController and list-todos view. Make TodoService a @Service and inject it.
+- Step 11: Architecture of Web Applications
+- Step 12: Session vs Model vs Request - @SessionAttributes
+- Step 13: Add new todo
+- Step 14: Display Todos in a table using JSTL Tags
+- Step 15: Bootstrap for Page Formatting using webjars
+- Step 16: Let's delete a Todo
+- Step 17: Format Add Todo Page and Adding Basic HTML5 form validation
+- Step 18: Introduce JSR 349 Validations using Hibernate Validator - First Command Bean.
+- Step 19: Updating a todo
+- Step 20: Let's add a Target Date for Todo - Use initBinder to Handle Date Fields
+- Step 21: JSP Fragments and Navigation Bar
+- Step 22: Preparing for Spring Security
+- Step 23: Initial Spring Security Setup
+- Step 24: Refactor and add Logout Functionality using Spring Security
+- Step 25: Exception Handling
+
+---
+
+- We do NOT interact with a Database in this Beginner’s Course.
+- We will be building a traditional JSP based web application in this course. 
+
+---
 
 ### Expectations
 - You should know Java. You should understand usage of Annotations.
 - You should understand the basics of Spring framework.
-- A basic understanding of JPA, Spring Security will be useful.
 - You are NOT expected to have any experience with Eclipse or Maven.
 - We will help you install Eclipse and get up and running with Maven.
 
 ## Let's have some fun
 - What are we waiting for?
-- Let's have some fun with Spring Boot in 25 Steps.
+- Let's have some fun building a web application Spring Boot in 25 Steps.
 - I had fun creating this course and hope you would too.
 - Thanks for your interest in Our Course 
   - I hope you’re as excited as I am!  
@@ -104,6 +88,12 @@ With Microservices, focus is shifting to getting started with developing web app
   - go ahead and hit that Enroll button, 
   - or take a test drive by using the Free Preview feature.  
 - See you in the course!
+
+## Getting Started
+- Eclipse - https://courses.in28minutes.com/p/eclipse-tutorial-for-beginners
+- Maven - https://courses.in28minutes.com/p/maven-tutorial-for-beginners-in-5-steps
+- JUnit - https://courses.in28minutes.com/p/junit-tutorial-for-beginners
+- Mockito - https://courses.in28minutes.com/p/mockito-for-beginner-in-5-steps
 
 ## About in28Minutes
 - At in28Minutes, we ask ourselves one question everyday. How do we help you learn effectively - that is more quickly and retain more of what you have learnt?

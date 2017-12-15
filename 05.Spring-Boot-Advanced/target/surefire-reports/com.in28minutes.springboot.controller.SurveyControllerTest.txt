@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.in28minutes.springboot.controller.SurveyControllerTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.782 sec - in com.in28minutes.springboot.controller.SurveyControllerTest
