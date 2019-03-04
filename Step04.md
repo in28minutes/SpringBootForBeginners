@@ -15,7 +15,7 @@
 - spring-boot-starter-security
 - spring-boot-starter-data-jpa
 - spring-boot-starter-data-rest
-- More at https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#using-boot-starter
+- More at https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using-boot-starter
 
 ## Useful Snippets and References
 First Snippet
