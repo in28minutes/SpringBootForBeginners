@@ -25,7 +25,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public void configureGlobalSecurity(AuthenticationManagerBuilder auth)
 			throws Exception {
-		auth.inMemoryAuthentication().withUser("in28Minutes").password("dummy")
+		auth.inMemoryAuthentication().passwordEncoder(org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance()).withUser("in28Minutes").password("dummy")
 				.roles("USER", "ADMIN");
 	}
 
@@ -89,10 +89,10 @@ Not Needed anymore with Spring Boot Auto Configuration
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -405,7 +405,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	@Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth)
             throws Exception {
-        auth.inMemoryAuthentication().withUser("in28Minutes").password("dummy")
+        auth.inMemoryAuthentication().passwordEncoder(org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance()).withUser("in28Minutes").password("dummy")
                 .roles("USER", "ADMIN");
     }
 	
