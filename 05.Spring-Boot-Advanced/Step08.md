@@ -296,7 +296,7 @@ public class SurveyService {
 		List<Question> questions = new ArrayList<>(Arrays.asList(question1,
 				question2, question3, question4));
 
-		Survey survey = new Survey("Survey1", "My Favorite Survey",
+		Survey survey = new Survey("survey1", "My Favorite Survey",
 				"Description of the Survey", questions);
 
 		surveys.add(survey);
