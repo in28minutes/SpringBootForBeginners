@@ -1,4 +1,6 @@
 # SpringBootForBeginners
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fin28minutes%2FSpringBootForBeginners&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=PAGE+VIEWS&edge_flat=false)](https://hits.seeyoufarm.com)
+
 Spring Boot Tutorial For Beginners
 * [Installing Eclipse, Maven and Java](#installing-tools)
 * [Running Examples](#running-examples)
